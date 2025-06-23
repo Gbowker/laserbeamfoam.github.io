@@ -1,6 +1,10 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
+
+
+var liggghts_or_laser_prop;
+
 // Set up the scene
 const scene = new THREE.Scene();
 
@@ -98,13 +102,17 @@ var plate_height = parseFloat($("#plate_height").val()) || 1;
 var plate_height_input = document.getElementById("plate_height");
 var plate_length = parseFloat($("#plate_length").val()) || 1;
 var plate_length_input = document.getElementById("plate_length");
-var layer_thickness = (parseFloat($("#layer_thickness").val())* 3.2)/ 800 || 1;
+var layer_thickness =
+  (parseFloat($("#layer_thickness").val()) * 3.2) / 800 || 1;
 var layer_thickness_input = document.getElementById("layer_thickness");
+
+var domain_height = parseFloat($("#domain_height").val()) || 1;
 
 // 4. Create Box Geometry
 var width = (plate_width * 3.2) / 800; // x axis
 var height = (plate_height * 3.2) / 800; // y axis
 var length = (plate_length * 3.2) / 800; // z axis
+var height_domain = (domain_height * 3.2) / 800; // z axis
 
 const geometry = new THREE.BoxGeometry(width, height, length);
 
@@ -123,16 +131,20 @@ plateEdgeLines.position.set(width / 2, height / 2, -length / 2);
 // 6. Add only the edges to the scene (no solid box)
 scene.add(plateEdgeLines);
 
-const geometry2 = new THREE.BoxGeometry(width, layer_thickness, length);
+const powder_layer_geometry = new THREE.BoxGeometry(
+  width,
+  layer_thickness,
+  length
+);
 
 // 5. Create edges geometry and material
-const edges2 = new THREE.EdgesGeometry(geometry2);
+const edges2 = new THREE.EdgesGeometry(powder_layer_geometry);
 const edgeMaterial2 = new THREE.LineBasicMaterial({
   color: 0xff0000,
   linewidth: 2,
 });
 // Use the standard edge material for compatibility across browsers
-geometry2.translate(width / 2, layer_thickness / 2, -length / 2);
+powder_layer_geometry.translate(width / 2, layer_thickness / 2, -length / 2);
 var powderEdgeLines = new THREE.LineSegments(edges2, edgeMaterial2);
 
 powderEdgeLines.position.set(
@@ -144,36 +156,82 @@ powderEdgeLines.position.set(
 // 6. Add only the edges to the scene (no solid box)
 scene.add(powderEdgeLines);
 
+const domain_geometry = new THREE.BoxGeometry(width, height_domain, length);
+
+// 5. Create edges geometry and material
+const domain_edges = new THREE.EdgesGeometry(domain_geometry);
+const domain_edge_material = new THREE.LineBasicMaterial({
+  color: 0x3366ff,
+  linewidth: 2,
+});
+
+// Use the standard edge material for compatibility across browsers
+domain_geometry.translate(width / 2, height_domain, -length / 2);
+var domain_edge_lines = new THREE.LineSegments(
+  domain_edges,
+  domain_edge_material
+);
+
+domain_edge_lines.position.set(width / 2, height_domain / 2, -length / 2);
+
+scene.add(domain_edge_lines);
+
 // Convert micrometers to scene units
 var radius = scaleMicromToPx(25);
-const cylinderHeight = scaleMicromToPx(200);
-const cylinderGeometry = new THREE.CylinderGeometry(
+var cylinderHeight = scaleMicromToPx(200);
+var cylinderGeometry = new THREE.CylinderGeometry(
   radius,
   radius,
   cylinderHeight,
   50
 );
+// Create a cylinder Material
 const cylinderMaterial = new THREE.MeshStandardMaterial({
-  color: 0x33ff33,
-  opacity: 1,
+  color: 0x55ff55,
+  opacity: 0.8,
   transparent: true,
 });
 
-const cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
+const cylinderMaterial_end = new THREE.MeshStandardMaterial({
+  color: 0xff2222,
+  opacity: 0.5,
+  transparent: true,
+});
 
-const x = scaleMicromToPx(100);
-const y = scaleMicromToPx(0);
-const z = scaleMicromToPx(-100);
+// By default, the origin of rotation for a THREE.Mesh (like cylinder) is its local (0,0,0) position.
+// For CylinderGeometry, this is at the center of the cylinder along its height.
+// If you want to rotate around the base (bottom) of the cylinder instead of the center,
+// you need to shift the geometry so that the base is at y=0 (or whichever axis is "up" in your scene).
 
-cylinder.position.set(x, y + cylinderHeight / 2, z); // y + height/2 to sit on ground
-cylinder.rotation.y = Math.PI / 2; // Align along Y axis
-cylinder.position.set(x, y + cylinderHeight / 2, z); // y + height/2 to sit on ground
+// Move the geometry so the base is at y=0 (instead of center at y=0)
+// cylinderGeometry.translate(0, 0 , 0);
+
+var cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
+var cylinder_end = new THREE.Mesh(cylinderGeometry, cylinderMaterial_end);
+
+var x = scaleMicromToPx($("#laser_pos_x").val());
+var y = scaleMicromToPx(0);
+var z = scaleMicromToPx($("#laser_pos_z").val());
+
+var x_end = scaleMicromToPx($("#laser_pos_x_end").val());
+var y_end = scaleMicromToPx(0);
+var z_end = scaleMicromToPx($("#laser_pos_z_end").val());
+
+cylinder.position.set(x, y + cylinderHeight / 2, -z); // y + height/2 to sit on ground
+// cylinder.rotation.y = Math.PI / 2; // Align along Y axis
+cylinder.position.set(x, y + cylinderHeight / 2, -z); // y + height/2 to sit on ground
+
+cylinder_end.position.set(x_end, y + cylinderHeight / 2, -z_end); // y + height/2 to sit on ground
+// cylinder_end.rotation.y = Math.PI / 2; // Align along Y axis
+cylinder_end.position.set(x_end, y_end + cylinderHeight / 2, -z_end); // y + height/2 to sit on ground
 
 scene.add(cylinder);
-
-// Set up the camera
-const camera = new THREE.PerspectiveCamera();
-camera.position.set(2.2, 2.5, 1);
+scene.add(cylinder_end);
+// Remove or comment out controls.enableDamping and controls.dampingFactor if present
+// Make sure OrbitControls is not set to "enableDamping" or "dampingFactor"
+// This will prevent the camera from orbiting in a "curved" or smooth way
+// If you want a fixed, orthogonal view, use an OrthographicCamera instead of PerspectiveCamera
+// Example (replace PerspectiveCamera with OrthographicCamera if you want a flat, non-curved look):
 
 import { STLLoader } from "three/addons/loaders/STLLoader.js";
 import { STLExporter } from "three/addons/exporters/STLExporter.js";
@@ -181,6 +239,9 @@ import { STLExporter } from "three/addons/exporters/STLExporter.js";
 // Set up the renderer and attach it to the document
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(814, 830);
+
+const camera = new THREE.PerspectiveCamera();
+camera.position.set(2.2, 2.5, 1);
 
 document
   .getElementById("laser_position_window")
@@ -229,17 +290,7 @@ $(document).ready(function () {
   });
 });
 
-// Global variables
-
-var laser_x_obj = $("#laser_pos_x");
-var laser_z_obj = $("#laser_pos_z");
-var laser_radius_obj = $("#laser_rad");
-
-// $(laser_x_obj).on("change", function () {
-//   cylinder.position.set(scaleMicromToPx($(this).val()), cylinder.position.y, cylinder.position.z);
-// });
-
-$(laser_x_obj).on("input", function () {
+$("#laser_pos_x").on("input", function () {
   cylinder.position.set(
     scaleMicromToPx($(this).val()),
     cylinder.position.y,
@@ -247,7 +298,7 @@ $(laser_x_obj).on("input", function () {
   );
 });
 
-$(laser_z_obj).on("input", function () {
+$("#laser_pos_z").on("input", function () {
   cylinder.position.set(
     cylinder.position.x,
     cylinder.position.y,
@@ -255,7 +306,104 @@ $(laser_z_obj).on("input", function () {
   );
 });
 
-$(laser_radius_obj).on("input", function () {
+$("#laser_angle_yx").on("input", function () {
+  var domain_height = scaleMicromToPx($("#domain_height").val());
+
+  var x = scaleMicromToPx($("#laser_pos_x").val());
+  var z = scaleMicromToPx($("#laser_pos_z").val());
+
+  var x_end = scaleMicromToPx($("#laser_pos_x_end").val());
+  var z_end = scaleMicromToPx($("#laser_pos_z_end").val());
+
+  var cylinder_rot_yx = ($("#laser_angle_yx").val() * Math.PI) / 180;
+  var cylinder_rot_yz = ($("#laser_angle_yz").val() * Math.PI) / 180;
+
+  var radius = scaleMicromToPx($("#laser_rad").val());
+
+  scene.remove(cylinder);
+  cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
+  cylinder.position.set(
+    x + (domain_height * Math.sin(cylinder_rot_yx)) / 2,
+    y + cylinderHeight / 2,
+    -(z + (y + cylinderHeight / 2) * Math.sin(cylinder_rot_yz))
+  ); // y + height/2 to sit on ground
+  cylinder.position.set(
+    x + (domain_height * Math.sin(cylinder_rot_yx)) / 2,
+    y + cylinderHeight / 2,
+    -(z + (y + cylinderHeight / 2) * Math.sin(cylinder_rot_yz))
+  ); // y + height/2 to sit on ground
+  cylinder.rotation.z = cylinder_rot_yx; // Align along Y axis
+  cylinder.rotation.x = cylinder_rot_yz; // Align along Y axis
+  scene.add(cylinder);
+
+  scene.remove(cylinder_end);
+  cylinder_end = new THREE.Mesh(cylinderGeometry, cylinderMaterial_end);
+  cylinder_end.position.set(
+    x_end + (domain_height * Math.sin(cylinder_rot_yx)) / 2,
+    y + cylinderHeight / 2,
+    -(z_end + (y + cylinderHeight / 2) * Math.sin(cylinder_rot_yx))
+  ); // y + height/2 to sit on ground
+  cylinder_end.position.set(
+    x_end + (domain_height * Math.sin(cylinder_rot_yx)) / 2,
+    y + cylinderHeight / 2,
+    -(z_end + (y + cylinderHeight / 2) * Math.sin(cylinder_rot_yz))
+  ); // y + height/2 to sit on ground
+  cylinder_end.rotation.z = cylinder_rot_yx; // Align along Y axis
+  cylinder_end.rotation.x = cylinder_rot_yz; // Align along Y axis
+  scene.add(cylinder_end);
+});
+
+$("#laser_angle_yz").on("input", function () {
+  var domain_height = scaleMicromToPx($("#domain_height").val());
+  var x = scaleMicromToPx($("#laser_pos_x").val());
+  var z = scaleMicromToPx($("#laser_pos_z").val());
+  var x_end = scaleMicromToPx($("#laser_pos_x_end").val());
+  var z_end = scaleMicromToPx($("#laser_pos_z_end").val());
+  var cylinder_rot_yx = ($("#laser_angle_yx").val() * Math.PI) / 180;
+  var cylinder_rot_yz = ($("#laser_angle_yz").val() * Math.PI) / 180;
+  var radius = scaleMicromToPx($("#laser_rad").val());
+
+  cylinderGeometry = new THREE.CylinderGeometry(
+    radius,
+    radius, // Convert micrometers to meters
+    cylinderHeight,
+    50
+  );
+
+  scene.remove(cylinder);
+  cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
+  cylinder.position.set(
+    x + (domain_height * Math.sin(cylinder_rot_yx)) / 2,
+    y + cylinderHeight / 2,
+    -(z + (y + cylinderHeight / 2) * Math.sin(cylinder_rot_yz))
+  ); // y + height/2 to sit on ground
+  cylinder.position.set(
+    x + (domain_height * Math.sin(cylinder_rot_yx)) / 2,
+    y + cylinderHeight / 2,
+    -(z + (y + cylinderHeight / 2) * Math.sin(cylinder_rot_yz))
+  ); // y + height/2 to sit on ground
+  cylinder.rotation.z = cylinder_rot_yx; // Align along Y axis
+  cylinder.rotation.x = cylinder_rot_yz; // Align along Y axis
+  scene.add(cylinder);
+
+  scene.remove(cylinder_end);
+  cylinder_end = new THREE.Mesh(cylinderGeometry, cylinderMaterial_end);
+  cylinder_end.position.set(
+    x_end + (domain_height * Math.sin(cylinder_rot_yx)) / 2,
+    y + cylinderHeight / 2,
+    -(z_end + (y + cylinderHeight / 2) * Math.sin(cylinder_rot_yx))
+  ); // y + height/2 to sit on ground
+  cylinder_end.position.set(
+    x_end + (domain_height * Math.sin(cylinder_rot_yx)) / 2,
+    y + cylinderHeight / 2,
+    -(z_end + (y + cylinderHeight / 2) * Math.sin(cylinder_rot_yz))
+  ); // y + height/2 to sit on ground
+  cylinder_end.rotation.z = cylinder_rot_yx; // Align along Y axis
+  cylinder_end.rotation.x = cylinder_rot_yz; // Align along Y axis
+  scene.add(cylinder_end);
+});
+
+$("#laser_rad").on("input", function () {
   // Remove the old cylinder from the scene
   scene.remove(cylinder);
 
@@ -293,22 +441,20 @@ $(laser_radius_obj).on("input", function () {
 });
 
 $(plate_width_input).on("input", function () {
-  refreshPlateSize();
+  updateDisplay();
 });
 
 $(plate_height_input).on("input", function () {
-  refreshPlateSize();
+  updateDisplay();
 });
 
 $(plate_length_input).on("input", function () {
-  refreshPlateSize();
+  updateDisplay();
 });
 
 $(layer_thickness_input).on("input", function () {
-  refreshPlateSize();
+  updateDisplay();
 });
-
-// Add event listener for window resize
 
 // ############################################  Functions   ######################################################
 // Animation loop
@@ -387,26 +533,23 @@ function createThickAxis(length = 5, radius = 0.05) {
   return group;
 }
 
-
-  // plate_width_input.addEventListener('change', () => {
-  //  refreshPlateSize();
-  // })
-
-  // plate_height_input.addEventListener('change', () => {
-  //   refreshPlateSize();
-  // })
-
-  // plate_length_input.addEventListener('change', () => {
-  //  refreshPlateSize();
-  // })
-
-
-function refreshPlateSize() {
-
+function updateDisplay() {
   var width = scaleMicromToPx($("#plate_width").val());
   var length = scaleMicromToPx($("#plate_length").val());
   var height = scaleMicromToPx($("#plate_height").val());
   var layer_thickness = scaleMicromToPx($("#layer_thickness").val());
+  var domain_height = scaleMicromToPx($("#domain_height").val());
+  var radius = scaleMicromToPx($("#laser_rad").val());
+
+  var x = scaleMicromToPx($("#laser_pos_x").val());
+  var z = scaleMicromToPx($("#laser_pos_z").val());
+
+  var x_end = scaleMicromToPx($("#laser_pos_x_end").val());
+  var z_end = scaleMicromToPx($("#laser_pos_z_end").val());
+
+  var cylinder_rot_yx = ($("#laser_angle_yx").val() * Math.PI) / 180;
+  var cylinder_rot_yz = ($("#laser_angle_yz").val() * Math.PI) / 180;
+  //  ----------------------------------------------------------------------------
 
   // Remove old plateEdgeLines from scene
   scene.remove(plateEdgeLines);
@@ -420,7 +563,10 @@ function refreshPlateSize() {
   plateEdgeLines = new THREE.LineSegments(edges, edgeMaterial);
   scene.add(plateEdgeLines);
 
+  //  ----------------------------------------------------------------------------
+
   scene.remove(powderEdgeLines);
+
   const newGeometry_powder = new THREE.BoxGeometry(
     width,
     layer_thickness,
@@ -437,53 +583,234 @@ function refreshPlateSize() {
 
   scene.add(powderEdgeLines);
 
+  //  ----------------------------------------------------------------------------
+
+  scene.remove(domain_edge_lines);
+
+  const domain_geometry = new THREE.BoxGeometry(width, domain_height, length);
+
+  // 5. Create edges geometry and material
+  var domain_edges = new THREE.EdgesGeometry(domain_geometry);
+
+  // Use the standard edge material for compatibility across browsers
+  domain_geometry.translate(width / 2, domain_height, -length / 2);
+  domain_edge_lines = new THREE.LineSegments(
+    domain_edges,
+    domain_edge_material
+  );
+
+  domain_edge_lines.position.set(width / 2, domain_height / 2, -length / 2);
+
+  scene.add(domain_edge_lines);
+  //  ----------------------------------------------------------------------------
+
+  // Convert micrometers to scene units
+  // cylinderHeight = domain_height*2/(Math.cos(cylinder_rot_yz)+Math.cos(cylinder_rot_yx)); // Adjust height based on angle
+  cylinderHeight = domain_height; // Adjust height based on angle
+  cylinderGeometry = new THREE.CylinderGeometry(
+    radius,
+    radius, // Convert micrometers to meters
+    cylinderHeight,
+    50
+  );
+
+  scene.remove(cylinder);
+  cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
+  cylinder.position.set(
+    x + (domain_height * Math.sin(cylinder_rot_yx)) / 2,
+    y + cylinderHeight / 2,
+    -(z + (y + cylinderHeight / 2) * Math.sin(cylinder_rot_yz))
+  ); // y + height/2 to sit on ground
+  cylinder.position.set(
+    x + (domain_height * Math.sin(cylinder_rot_yx)) / 2,
+    y + cylinderHeight / 2,
+    -(z + (y + cylinderHeight / 2) * Math.sin(cylinder_rot_yz))
+  ); // y + height/2 to sit on ground
+  cylinder.rotation.z = cylinder_rot_yx; // Align along Y axis
+  cylinder.rotation.x = cylinder_rot_yz; // Align along Y axis
+  scene.add(cylinder);
+
+  scene.remove(cylinder_end);
+  cylinder_end = new THREE.Mesh(cylinderGeometry, cylinderMaterial_end);
+  cylinder_end.position.set(
+    x_end + (domain_height * Math.sin(cylinder_rot_yx)) / 2,
+    y + cylinderHeight / 2,
+    -(z_end + (y + cylinderHeight / 2) * Math.sin(cylinder_rot_yx))
+  ); // y + height/2 to sit on ground
+  cylinder_end.position.set(
+    x_end + (domain_height * Math.sin(cylinder_rot_yx)) / 2,
+    y + cylinderHeight / 2,
+    -(z_end + (y + cylinderHeight / 2) * Math.sin(cylinder_rot_yz))
+  ); // y + height/2 to sit on ground
+  cylinder_end.rotation.z = cylinder_rot_yx; // Align along Y axis
+  cylinder_end.rotation.x = cylinder_rot_yz; // Align along Y axis
+  scene.add(cylinder_end);
 }
 
- $(function () {
-      let interval;
+$(function () {
+  let interval;
 
-      function holdButton($btn, direction, input ) {
-        const start = () => {
-          if (direction === 'up') input.stepUp();
-          else input.stepDown();
-          refreshPlateSize()
+  function holdButton($btn, direction, input) {
+    const start = () => {
+      if (direction === "up") input.stepUp();
+      else input.stepDown();
+      updateDisplay();
 
-          interval = setInterval(() => {
-            if (direction === 'up') input.stepUp();
-            else input.stepDown();
-            refreshPlateSize()
-          }, 90); // adjust speed here
-        };
+      interval = setInterval(() => {
+        if (direction === "up") input.stepUp();
+        else input.stepDown();
+        updateDisplay();
+      }, 90); // adjust speed here
 
-        const stop = () => clearInterval(interval);
+      // Cancel interval on mouseup/mouseleave/touchend/touchcancel
+      const cancelEvents = "mouseup mouseleave touchend touchcancel";
+      $btn.on(cancelEvents, () => clearInterval(interval));
+    };
 
-        $btn
-          .on('mousedown touchstart', start)
-          .on('mouseup mouseleave touchend touchcancel', stop);
-      }
+    const stop = () => clearInterval(interval);
 
-      holdButton($('#plate_width_plus'), 'up', document.getElementById('plate_width'));
-      holdButton($('#plate_width_minus'), 'down', document.getElementById('plate_width'));
+    $btn
+      .on("mousedown touchstart", start)
+      .on("mouseup mouseleave touchend touchcancel", stop);
+  }
 
+  holdButton(
+    $("#plate_width_plus"),
+    "up",
+    document.getElementById("plate_width")
+  );
+  holdButton(
+    $("#plate_width_minus"),
+    "down",
+    document.getElementById("plate_width")
+  );
 
-      holdButton($('#plate_height_plus'), 'up', document.getElementById('plate_height'));
-      holdButton($('#plate_height_minus'), 'down', document.getElementById('plate_height'));
+  holdButton(
+    $("#plate_height_plus"),
+    "up",
+    document.getElementById("plate_height")
+  );
+  holdButton(
+    $("#plate_height_minus"),
+    "down",
+    document.getElementById("plate_height")
+  );
 
-      holdButton($('#plate_length_plus'), 'up', document.getElementById('plate_length'));
-      holdButton($('#plate_length_minus'), 'down', document.getElementById('plate_length'));
+  holdButton(
+    $("#plate_length_plus"),
+    "up",
+    document.getElementById("plate_length")
+  );
+  holdButton(
+    $("#plate_length_minus"),
+    "down",
+    document.getElementById("plate_length")
+  );
 
-      holdButton($('#layer_thickness_plus'), 'up', document.getElementById('layer_thickness'));
-      holdButton($('#layer_thickness_minus'), 'down', document.getElementById('layer_thickness'));
+  holdButton(
+    $("#layer_thickness_plus"),
+    "up",
+    document.getElementById("layer_thickness")
+  );
+  holdButton(
+    $("#layer_thickness_minus"),
+    "down",
+    document.getElementById("layer_thickness")
+  );
 
-    });
+  holdButton(
+    $("#domain_height_plus"),
+    "up",
+    document.getElementById("domain_height")
+  );
+  holdButton(
+    $("#domain_height_minus"),
+    "down",
+    document.getElementById("domain_height")
+  );
 
+  holdButton(
+    $("#laser_radius_plus"),
+    "up",
+    document.getElementById("laser_rad")
+  );
+  holdButton(
+    $("#laser_radius_minus"),
+    "down",
+    document.getElementById("laser_rad")
+  );
 
+  holdButton(
+    $("#laser_position_x_plus"),
+    "up",
+    document.getElementById("laser_pos_x")
+  );
+  holdButton(
+    $("#laser_position_x_minus"),
+    "down",
+    document.getElementById("laser_pos_x")
+  );
 
+  holdButton(
+    $("#laser_position_z_plus"),
+    "up",
+    document.getElementById("laser_pos_z")
+  );
+  holdButton(
+    $("#laser_position_z_minus"),
+    "down",
+    document.getElementById("laser_pos_z")
+  );
 
-  document.getElementById("download_liggghts_input_button").addEventListener("click", async () => {
+  holdButton(
+    $("#laser_position_x_end_plus"),
+    "up",
+    document.getElementById("laser_pos_x_end")
+  );
+  holdButton(
+    $("#laser_position_x_end_minus"),
+    "down",
+    document.getElementById("laser_pos_x_end")
+  );
 
+  holdButton(
+    $("#laser_position_z_end_plus"),
+    "up",
+    document.getElementById("laser_pos_z_end")
+  );
+  holdButton(
+    $("#laser_position_z_end_minus"),
+    "down",
+    document.getElementById("laser_pos_z_end")
+  );
+
+  holdButton(
+    $("#laser_angle_yz_plus"),
+    "up",
+    document.getElementById("laser_angle_yz")
+  );
+  holdButton(
+    $("#laser_angle_yz_minus"),
+    "down",
+    document.getElementById("laser_angle_yz")
+  );
+
+  holdButton(
+    $("#laser_angle_yx_plus"),
+    "up",
+    document.getElementById("laser_angle_yx")
+  );
+  holdButton(
+    $("#laser_angle_yx_minus"),
+    "down",
+    document.getElementById("laser_angle_yx")
+  );
+});
+
+document
+  .getElementById("download_liggghts_input_button")
+  .addEventListener("click", async () => {
     const zip = new JSZip();
-
 
     var liggghts_input = `# Trial run of Powder loading
 
@@ -496,7 +823,14 @@ communicate		single vel yes
 
 units 			cgs
 
-region			domain block 0.0 ${parseFloat($("#plate_width").val())/10000} 0.0 ${parseFloat($("#plate_length").val())/10000} 0.0 ${(parseFloat($("#plate_height").val())+parseFloat($("#layer_thickness").val()))*3.33/10000} units box
+region			domain block 0.0 ${parseFloat($("#plate_width").val()) / 10000} 0.0 ${
+      parseFloat($("#plate_length").val()) / 10000
+    } 0.0 ${
+      ((parseFloat($("#plate_height").val()) +
+        parseFloat($("#layer_thickness").val())) *
+        3.33) /
+      10000
+    } units box
 
 create_box		1 domain
 
@@ -600,7 +934,11 @@ run			500000 upto
 compute         2 all reduce sum c_1
 thermo_style    custom step c_2
 run             0
-variable        co atom "z+c_1 > ${(parseFloat($("#plate_height").val())+parseFloat($("#layer_thickness").val()))/10000}"
+variable        co atom "z+c_1 > ${
+      (parseFloat($("#plate_height").val()) +
+        parseFloat($("#layer_thickness").val())) /
+      10000
+    }"
 group           layer variable co
 
 
@@ -611,8 +949,7 @@ run			750000 upto
 
 `;
 
-
-var bedPlateDict = `/*--------------------------------*- C++ -*----------------------------------*
+    var bedPlateDict = `/*--------------------------------*- C++ -*----------------------------------*
 | =========                 |                                                |
 | \\      /  F ield         | foam-extend: Open Source CFD                    |
 |  \\    /   O peration     | Version:     4.0                                |
@@ -632,13 +969,13 @@ FoamFile
 Bed true;
 
 xmin 0.0;
-xmax ${parseFloat($("#plate_width").val())/1000000};
+xmax ${parseFloat($("#plate_width").val()) / 1000000};
 
 ymin 0.0;
-ymax ${parseFloat($("#plate_length").val())/1000000};
+ymax ${parseFloat($("#plate_length").val()) / 1000000};
 
 zmin 0.0;
-zmax ${parseFloat($("#plate_height").val())/1000000};
+zmax ${parseFloat($("#plate_height").val()) / 1000000};
 
 // ************************************************************************* //`;
 
@@ -660,59 +997,59 @@ zmax ${parseFloat($("#plate_height").val())/1000000};
     // Domain geometry
     const export_geometry_domain = new THREE.BoxGeometry(
       parseFloat($("#plate_width").val()),
-      (parseFloat($("#plate_height").val()) + parseFloat($("#layer_thickness").val())) * 3.33,
+      (parseFloat($("#plate_height").val()) +
+        parseFloat($("#layer_thickness").val())) *
+        3.33,
       parseFloat($("#plate_length").val())
     );
     // Move so that the minimum corner is at (0,0,0)
     export_geometry_domain.translate(
       parseFloat($("#plate_width").val()) / 2,
-      ((parseFloat($("#plate_height").val()) + parseFloat($("#layer_thickness").val())) * 3.33) / 2,
+      ((parseFloat($("#plate_height").val()) +
+        parseFloat($("#layer_thickness").val())) *
+        3.33) /
+        2,
       parseFloat($("#plate_length").val()) / 2
     );
 
-    const export_mesh_box = new THREE.Mesh(export_geometry_box, new THREE.MeshBasicMaterial());
-    const export_mesh_domain = new THREE.Mesh(export_geometry_domain, new THREE.MeshBasicMaterial());
+    const export_mesh_box = new THREE.Mesh(
+      export_geometry_box,
+      new THREE.MeshBasicMaterial()
+    );
+    const export_mesh_domain = new THREE.Mesh(
+      export_geometry_domain,
+      new THREE.MeshBasicMaterial()
+    );
 
     const exporter = new STLExporter();
     const stl_string_box = exporter.parse(export_mesh_box);
     const stl_string_domain = exporter.parse(export_mesh_domain);
 
-  // Simulate folder and files
-  zip.folder("DEM_liggghts_case").file("mesh/plate.stl", stl_string_box);
-  zip.folder("DEM_liggghts_case").file("mesh/domain.stl", stl_string_domain);
-  zip.folder("DEM_liggghts_case").file("input.liggghts", liggghts_input);
-  zip.folder("DEM_liggghts_case").file("OpenFOAM/system/bedPlateDict", bedPlateDict);
-  // Create zip file
-  const blob = await zip.generateAsync({ type: "blob" });
+    // Simulate folder and files
+    zip.folder("DEM_liggghts_case").file("mesh/plate.stl", stl_string_box);
+    zip.folder("DEM_liggghts_case").file("mesh/domain.stl", stl_string_domain);
+    zip.folder("DEM_liggghts_case").file("input.liggghts", liggghts_input);
+    zip
+      .folder("DEM_liggghts_case")
+      .file("OpenFOAM/system/bedPlateDict", bedPlateDict);
+    // Create zip file
+    const blob = await zip.generateAsync({ type: "blob" });
 
-  // Trigger download
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "DEM_liggghts_case.zip";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-});
+    // Trigger download
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "DEM_liggghts_case.zip";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
 
-
- $("#info_div_input").val(generateLiggghtsInput(parseFloat($("#plate_width").val())/10000, parseFloat($("#plate_height").val()/10000, parseFloat($("#plate_length").val())/10000,  parseFloat($("#layer_thickness").val())/10000)));
-
-
-$("#show_liggghts_input_file").on("click", function () {
-
-  $("#info_div").removeClass("hidden");
-  $("#info_div").addClass("revealed");
-
-  $("#info_div_content").removeClass("hidden");
-  $("#info_div_content").addClass("revealed");
- 
-})
 
 
 
 function generateLiggghtsInput(width, height, length, layer_thickness) {
 
-var liggghts_input = `# Trial run of Powder loading
+  var liggghts_input = `# Trial run of Powder loading
 
 atom_style		granular
 atom_modify		map	array
@@ -827,7 +1164,7 @@ run			500000 upto
 compute         2 all reduce sum c_1
 thermo_style    custom step c_2
 run             0
-variable        co atom "z+c_1 > ${height+layer_thickness}"
+variable        co atom "z+c_1 > ${height + layer_thickness}"
 group           layer variable co
 
 
@@ -841,12 +1178,14 @@ run			750000 upto
   return liggghts_input;
 }
 
+function generateBedPlateDict() {
 
+  var width = parseFloat($("#plate_width").val()) / 1000000;
+  var height = parseFloat($("#plate_height").val()) / 1000000;
+  var length = parseFloat($("#plate_length").val()) / 1000000;
 
-function generateBedPlateDict(width, height, length) {
-
-var bedPlateDict = `/*--------------------------------*- C++ -*----------------------------------*
-| =========                 |                                                |
+  var bedPlateDict = `/*--------------------------------*- C++ -*----------------------------------*
+| =========                |                                                 |
 | \\      /  F ield         | foam-extend: Open Source CFD                    |
 |  \\    /   O peration     | Version:     4.0                                |
 |   \\  /    A nd           | Web:         http://www.foam-extend.org         |
@@ -868,63 +1207,370 @@ xmin 0.0;
 xmax ${width};
 
 ymin 0.0;
-ymax ${height};
+ymax ${length};
 
 zmin 0.0;
-zmax ${length};
+zmax ${height};
 
 // ************************************************************************* //`;
 
   return bedPlateDict;
 }
 
-
-
 $("#close_div").on("click", function () {
-
   $("#info_div").addClass("hidden");
   $("#info_div").removeClass("revealed");
-
   $("#info_div_content").addClass("hidden");
   $("#info_div_content").removeClass("revealed");
-
-})
-
-
-
-$("#info_div_title_1").on("click", function () {
-  $("#info_div_title_1").addClass("info_div_active");
-  $("#info_div_title_2").removeClass("info_div_active");
-
-  $("#info_div_input").val(generateLiggghtsInput(parseFloat($("#plate_width").val())/10000, parseFloat($("#plate_height").val()/10000, parseFloat($("#plate_length").val())/10000,  parseFloat($("#layer_thickness").val())/10000)));
-
-})
-
-$("#info_div_title_2").on("click", function () {
-  $("#info_div_title_1").removeClass("info_div_active");
-  $("#info_div_title_2").addClass("info_div_active");
-$("#info_div_input").val(generateBedPlateDict(parseFloat($("#plate_width").val())/1000000, parseFloat($("#plate_height").val())/1000000, parseFloat($("#plate_length").val())/1000000));
-})
-
-
+});
 
 $("#light_theme").on("click", function () {
   $("#light_theme").addClass("active_theme");
   $("#dark_theme").removeClass("active_theme");
-
   $("body").css("background", "#d8d8d8");
   $("body").css("transition", "background 0.4s");
-
   scene.background = new THREE.Color("rgb(255, 255, 255)");
-})
+});
 
 $("#dark_theme").on("click", function () {
-
   $("#light_theme").removeClass("active_theme");
   $("#dark_theme").addClass("active_theme");
-
   $("body").css("background", "#4b4b4b");
   $("body").css("transition", "background 0.4s");
-
   scene.background = new THREE.Color("rgb(42, 42, 42)");
+});
+
+$("#copy_div").on("click", function () {
+  const textarea = document.getElementById("info_div_input");
+  const text = textarea.value;
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      // alert("Text copied to clipboard!");
+    })
+    .catch((err) => {
+      console.error("Failed to copy: ", err);
+    });
+});
+
+
+function generateLaserPropInputFiles() {
+
+var radius = $("#laser_rad").val();
+
+
+  var laser_prop_input = `/*--------------------------------*- C++ -*----------------------------------*
+  \=========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  6
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      PhaseFieldProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+V_incident	(0 1 0);//(0 1 0);//NORMALISED IN CODE
+
+timeVsLaserPosition
+{
+    file    "$FOAM_CASE/constant/timeVsLaserPosition";
+    outOfBounds clamp;
+}
+
+timeVsLaserPower
+{
+    file    "$FOAM_CASE/constant/timeVsLaserPower";
+    outOfBounds clamp;
+}
+
+laserRadius ${radius}e-6;
+
+N_sub_divisions	1;
+
+wavelength	1.064e-6;
+e_num_density	5.83e29;
+
+Radius_Flavour	2.0;
+
+PowderSim true;
+
+// HS_a 0.000025;
+// HS_bg 0.0;//20
+// HS_lg 0.000125;
+// HS_velocity 1.0;//6.0;
+
+// HS_Q 150.0;//
+
+// N_sub_divisions	1;
+
+// //For linear path set oscAmpX=oscAmpz=0
+// //For sine path set oscAmpz=0
+// //For circular path set amplitude and frequency in both X and Z
+// HS_oscAmpX 0.0;
+// HS_oscAmpZ 0.0;
+
+// HS_oscFreqX 180;
+// HS_oscFreqZ 180;
+
+// wavelength	1.064e-6;
+// e_num_density	5.83e29;
+// elec_resistivity	1.0e-6;
+
+// Radius_Flavour	3.0;
+`
+
+
+  return laser_prop_input;
+}
+
+
+function generateTimeVsLaserPosition() {
+
+  var x = parseInt($("#laser_pos_x").val());
+  var z = parseInt($("#laser_pos_z").val());
+  var x_end= parseInt($("#laser_pos_x_end").val());
+  var z_end= parseInt($("#laser_pos_z_end").val());
+  
+  var timeVsLaserPosition = `(
+  (0          (${x}e-6  20e-6  ${z}e-6))
+  (600e-6     (${x_end}e-6  20e-6  ${z_end}e-6))
+  (1000e-6    (${x_end}e-6  20e-6  ${z_end}e-6))
+)`
+
+  return timeVsLaserPosition;
+}
+
+function generateTimeVsLaserPower() {
+
+  var laserPower = parseInt($("#laser_power").val());
+  var timeVsLaserPower = `(
+  (0                 0)
+  (1e-8             ${laserPower})
+  (600e-6           ${laserPower})
+  (600.001e-6       0  )
+  (1000e-6          0  )
+)`
+
+  return timeVsLaserPower;
+}
+
+
+$("#show_liggghts_input_file").on("click", function () {
+
+    $("#info_div_title_3").addClass("hidden");
+
+    liggghts_or_laser_prop = "liggghts";
+
+    $("#info_div").removeClass("hidden");
+    $("#info_div").addClass("revealed");
+
+    $("#info_div_content").removeClass("hidden");
+    $("#info_div_content").addClass("revealed");
+    
+    $("#info_div_title_1").text("LIGGGHTS Input File");
+    $("#info_div_title_2").text("bedPlateDict");
+
+    $("#info_div_title_1").addClass("info_div_active");
+    $("#info_div_title_2").removeClass("info_div_active");
+
+  $("#info_div_input").val(
+    generateLiggghtsInput(
+      parseFloat($("#plate_width").val()) / 10000,
+      parseFloat(
+        $("#plate_height").val() / 10000,
+        parseFloat($("#plate_length").val()) / 10000,
+        parseFloat($("#layer_thickness").val()) / 10000
+      )
+    )
+  );
+      
+});
+
+
+$("#show_laser_prop_input_files").on("click", function () {
+
+  liggghts_or_laser_prop = "laser_prop";
+
+  $("#info_div_title_3").removeClass("hidden");
+  $("#info_div").removeClass("hidden");
+  $("#info_div").addClass("revealed");
+  $("#info_div_content").removeClass("hidden");
+  $("#info_div_content").addClass("revealed");
+  $("#info_div_input").val(generateLaserPropInputFiles());
+  $("#info_div_title_1").text("LaserProperties");
+  $("#info_div_title_2").text("timeVsLaserPosition");
+  $("#info_div_title_1").addClass("info_div_active");
+  $("#info_div_title_2").removeClass("info_div_active");
+  $("#info_div_title_3").removeClass("info_div_active");
+
 })
+
+
+$("#info_div_title_1").on("click", function () {
+
+  $("#info_div_title_1").addClass("info_div_active");
+  $("#info_div_title_2").removeClass("info_div_active");
+  $("#info_div_title_3").removeClass("info_div_active");
+
+
+  if(liggghts_or_laser_prop === "liggghts") {
+
+  $("#info_div_input").val(
+    generateLiggghtsInput(
+      parseFloat($("#plate_width").val()) / 10000,
+      parseFloat(
+        $("#plate_height").val() / 10000,
+        parseFloat($("#plate_length").val()) / 10000,
+        parseFloat($("#layer_thickness").val()) / 10000
+      )
+    )
+  );
+
+  }else{
+    $("#info_div_input").val(generateLaserPropInputFiles());
+  }
+
+});
+
+$("#info_div_title_2").on("click", function () {
+  
+  $("#info_div_title_1").removeClass("info_div_active");
+  $("#info_div_title_3").removeClass("info_div_active");
+  $("#info_div_title_2").addClass("info_div_active");
+
+  if(liggghts_or_laser_prop === "liggghts") {
+    $("#info_div_input").val(
+      generateBedPlateDict()
+    );
+  }else{
+    $("#info_div_input").val(generateTimeVsLaserPosition());
+  }
+
+});
+
+
+$("#info_div_title_3").on("click", function () {
+  
+  $("#info_div_title_1").removeClass("info_div_active");
+  $("#info_div_title_2").removeClass("info_div_active");
+  $("#info_div_title_3").addClass("info_div_active");
+  $("#info_div_input").val(generateTimeVsLaserPower());
+
+});
+
+
+document
+  .getElementById("download_laser_prop_input_button")
+  .addEventListener("click", async () => {
+    const zip = new JSZip();
+
+    // Simulate folder and files
+    zip.folder("OF_laser_prop_files").file("OpenFOAM/constant/LaserProperties", generateLaserPropInputFiles());
+    zip.folder("OF_laser_prop_files").file("OpenFOAM/constant/timeVsLaserPosition", generateTimeVsLaserPosition());
+    zip.folder("OF_laser_prop_files").file("OpenFOAM/constant/timeVsLaserPower", generateTimeVsLaserPower());
+  
+    // Create zip file
+    const blob = await zip.generateAsync({ type: "blob" });
+
+    // Trigger download
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "OF_laser_prop_files.zip";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+
+
+document
+  .getElementById("download_all_case_files_button")
+  .addEventListener("click", async () => {
+    const zip = new JSZip();
+
+  var liggghts_input = generateLiggghtsInput(
+    parseFloat($("#plate_width").val()) / 10000,
+    parseFloat(
+      $("#plate_height").val() / 10000,
+      parseFloat($("#plate_length").val()) / 10000,
+      parseFloat($("#layer_thickness").val()) / 10000
+    ))
+
+    var bedPlateDict = generateBedPlateDict();
+
+    // Create a mesh from the box geometry (not the edges)
+    // Plate geometry
+    const export_geometry_box = new THREE.BoxGeometry(
+      parseFloat($("#plate_width").val()),
+      parseFloat($("#plate_height").val()),
+      parseFloat($("#plate_length").val())
+    );
+
+    // Move so that the minimum corner is at (0,0,0)
+    export_geometry_box.translate(
+      parseFloat($("#plate_width").val()) / 2,
+      parseFloat($("#plate_height").val()) / 2,
+      parseFloat($("#plate_length").val()) / 2
+    );
+
+    // Domain geometry
+    const export_geometry_domain = new THREE.BoxGeometry(
+      parseFloat($("#plate_width").val()),
+      (parseFloat($("#plate_height").val()) +
+        parseFloat($("#layer_thickness").val())) *
+        3.33,
+      parseFloat($("#plate_length").val())
+    );
+    // Move so that the minimum corner is at (0,0,0)
+    export_geometry_domain.translate(
+      parseFloat($("#plate_width").val()) / 2,
+      ((parseFloat($("#plate_height").val()) +
+        parseFloat($("#layer_thickness").val())) *
+        3.33) /
+        2,
+      parseFloat($("#plate_length").val()) / 2
+    );
+
+    const export_mesh_box = new THREE.Mesh(
+      export_geometry_box,
+      new THREE.MeshBasicMaterial()
+    );
+    const export_mesh_domain = new THREE.Mesh(
+      export_geometry_domain,
+      new THREE.MeshBasicMaterial()
+    );
+
+    const exporter = new STLExporter();
+    const stl_string_box = exporter.parse(export_mesh_box);
+    const stl_string_domain = exporter.parse(export_mesh_domain);
+
+    // Simulate folder and files
+    zip.folder("OF_and_LIGGGHTS_case_files").file("LIGGGHTS/liggghts.in", liggghts_input);
+    zip.folder("OF_and_LIGGGHTS_case_files").file("LIGGGHTS/mesh/plate.stl", stl_string_box);
+    zip.folder("OF_and_LIGGGHTS_case_files").file("LIGGGHTS/mesh/domain.stl", stl_string_domain);
+
+    zip.folder("OF_and_LIGGGHTS_case_files").file("OpenFOAM/system/bedPlateDict", bedPlateDict);
+    zip.folder("OF_and_LIGGGHTS_case_files").file("OpenFOAM/constant/LaserProperties", generateLaserPropInputFiles());
+    zip.folder("OF_and_LIGGGHTS_case_files").file("OpenFOAM/constant/timeVsLaserPosition", generateTimeVsLaserPosition());
+    zip.folder("OF_and_LIGGGHTS_case_files").file("OpenFOAM/constant/timeVsLaserPower", generateTimeVsLaserPower());
+  
+    // Create zip file
+    const blob = await zip.generateAsync({ type: "blob" });
+
+    // Trigger download
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "OF_and_LIGGGHTS_case_files.zip";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+
+
+
+  

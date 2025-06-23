@@ -11,17 +11,14 @@
   <link rel="stylesheet" href="code/CSS/main.css">
 </head>
 
-<body>
-  <!-- <script src="scripts/jquery-1.11.3.min.js"></script> -->
+<body class="noselect">
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"> </script>
   <script type="text/javascript" src="code/JS/LaTexMathML.js"> </script>
   <script type="text/javascript" src="code/JS/echarts.js"> </script>
-  <!-- <script type="text/javascript" src="code/JS/main.js"> </script> -->
   <script src="code/JS/roundslider.min.js"></script>
   <script src="code/JS/math.min.js"></script>
 
   <div id="app">
-    <!-- TODO when you touch the rotate button the vectors dont update as they should -->
     <div id="app_title">
       LPBF Workbench v1.0
     </div>
@@ -37,20 +34,24 @@
 
           <span class="span_input_name">Plate width </span><input id="plate_width" class="stress_input" type="number"
             placeholder="tauyx" value="200"><span class="unit_width">$[ \mum]$</span> <button
-            class="change_button minus_button" id="plate_width_minus">-</button> <button class="change_button" id="plate_width_plus">+</button><br>
+            class="change_button minus_button" id="plate_width_minus">-</button> <button class="change_button"
+            id="plate_width_plus">+</button><br>
 
           <span class="span_input_name">Plate length$</span><input id="plate_length" class="stress_input" type="number"
             placeholder="tauyx" value="800"><span class="unit_width">$[\mum]$</span> <button
-            class="change_button minus_button" id="plate_length_minus">-</button> <button class="change_button" id="plate_length_plus">+</button><br>
+            class="change_button minus_button" id="plate_length_minus">-</button> <button class="change_button"
+            id="plate_length_plus">+</button><br>
 
           <span class="span_input_name">Plate height</span><input id="plate_height" class="stress_input" type="number"
             placeholder="tauyx" value="100"><span class="unit_width">$[\mum]$</span> <button
-            class="change_button minus_button" id="plate_height_minus">-</button> <button class="change_button" id="plate_height_plus">+</button><br>
+            class="change_button minus_button" id="plate_height_minus">-</button> <button class="change_button"
+            id="plate_height_plus">+</button><br>
 
           <span class="span_input_name">Layer thickness</span><input id="layer_thickness" class="stress_input"
             type="number" placeholder="tauyx" value="50"><span class="unit_width">$[\mum]$</span> <button
-            class="change_button minus_button" id="layer_thickness_minus">-</button> <button class="change_button" id="layer_thickness_plus">+</button><br>
-    
+            class="change_button minus_button" id="layer_thickness_minus">-</button> <button class="change_button"
+            id="layer_thickness_plus">+</button><br>
+
           <button id="show_liggghts_input_file">show input file</button>
           <button id="download_liggghts_input_button">download</button>
         </div>
@@ -61,40 +62,48 @@
           <div id="stress_input_container">
             <span id="section_title">LASER POSITION AND PROPERTIES</span>
 
-                <span class="span_input_name">Domain height</span><input id="domain_height" class="stress_input"
-            type="number" placeholder="tauyx" value="200"><span class="unit_width">$[\mum]$</span> <button
-            class="change_button minus_button" id="layer_thickness_minus">-</button> <button class="change_button" id="layer_thickness_plus">+</button><br>
+            <span class="span_input_name">Domain height</span><input id="domain_height" class="stress_input"
+              type="number" placeholder="tauyx" value="200"><span class="unit_width">$[\mum]$</span> <button
+              class="change_button minus_button" id="domain_height_minus">-</button> <button class="change_button"
+              id="domain_height_plus">+</button><br>
 
 
             <span class="span_input_name">Laser position - x</span><input id="laser_pos_x" class="stress_input"
               type="number" placeholder="tauyx" value="100"><span class="unit_width">$[ \mum]$</span> <button
-              class="change_button minus_button">-</button> <button class="change_button">+</button> &nbsp;(start)<br>
+              class="change_button minus_button" id="laser_position_x_minus">-</button> <button class="change_button"
+              id="laser_position_x_plus">+</button> &nbsp;(start)<br>
 
-            <span class="span_input_name">Laser position - x</span><input id="laser_pos_x" class="stress_input"
+            <span class="span_input_name">Laser position - x</span><input id="laser_pos_x_end" class="stress_input"
               type="number" placeholder="tauyx" value="100"><span class="unit_width">$[ \mum]$</span> <button
-              class="change_button minus_button">-</button> <button class="change_button">+</button> &nbsp;(end)<br>
-
-            <span class="span_input_name">Laser position - z$</span><input id="laser_pos_z" class="stress_input"
-              type="number" placeholder="tauyx" value="100"><span class="unit_width">$[ \mum]$</span> <button
-              class="change_button minus_button">-</button> <button class="change_button">+</button> &nbsp;(start)<br>
+              class="change_button minus_button" id="laser_position_x_end_minus">-</button> <button
+              class="change_button" id="laser_position_x_end_plus">+</button> &nbsp;(end)<br>
 
             <span class="span_input_name">Laser position - z$</span><input id="laser_pos_z" class="stress_input"
               type="number" placeholder="tauyx" value="100"><span class="unit_width">$[ \mum]$</span> <button
-              class="change_button minus_button">-</button> <button class="change_button">+</button> &nbsp;(end)<br>
+              class="change_button minus_button" id="laser_position_z_minus">-</button> <button class="change_button"
+              id="laser_position_z_plus">+</button> &nbsp;(start)<br>
+
+            <span class="span_input_name">Laser position - z$</span><input id="laser_pos_z_end" class="stress_input"
+              type="number" placeholder="tauyx" value="700"><span class="unit_width">$[ \mum]$</span> <button
+              class="change_button minus_button" id="laser_position_z_end_minus">-</button> <button
+              class="change_button" id="laser_position_z_end_plus">+</button> &nbsp;(end)<br>
 
             <span class="span_input_name">Laser radius - r</span><input id="laser_rad" class="stress_input"
               type="number" placeholder="tauyx" value="25"><span class="unit_width">$[ \mum]$</span> <button
-              class="change_button minus_button">-</button> <button class="change_button">+</button><br>
+              class="change_button minus_button" id="laser_radius_minus">-</button> <button class="change_button"
+              id="laser_radius_plus">+</button><br>
 
-            <span class="span_input_name">Laser angle $\angle(y,x)$</span><input id="laser_rad" class="stress_input"
-              type="number" placeholder="tauyx" value="25"><span class="unit_width">$[deg ^\circ]$</span> <button
-              class="change_button minus_button">-</button> <button class="change_button">+</button><br>
+            <span class="span_input_name">Laser angle $\angle(y,x)$</span><input id="laser_angle_yx"
+              class="stress_input" type="number" placeholder="tauyx" value="0"><span class="unit_width">$[deg
+              ^\circ]$</span> <button class="change_button minus_button" id="laser_angle_yx_minus">-</button> <button
+              class="change_button" id="laser_angle_yx_plus">+</button><br>
 
-            <span class="span_input_name">Laser angle $\angle(y,z)$</span><input id="laser_rad" class="stress_input"
-              type="number" placeholder="tauyx" value="25"><span class="unit_width">$[deg ^\circ]$</span> <button
-              class="change_button minus_button">-</button> <button class="change_button">+</button><br>
+            <span class="span_input_name">Laser angle $\angle(y,z)$</span><input id="laser_angle_yz"
+              class="stress_input" type="number" placeholder="tauyx" value="0"><span class="unit_width">$[deg
+              ^\circ]$</span> <button class="change_button minus_button" id="laser_angle_yz_minus">-</button> <button
+              class="change_button" id="laser_angle_yz_plus">+</button><br>
 
-            <span class="span_input_name">Laser power $</span><input id="laser_rad" class="stress_input" type="number"
+            <span class="span_input_name">Laser power $</span><input id="laser_power" class="stress_input" type="number"
               placeholder="tauyx" value="150"><span class="unit_width">$[W]$</span> <button
               class="change_button minus_button">-</button> <button class="change_button">+</button><br>
 
@@ -102,9 +111,8 @@
               type="number" placeholder="tauyx" value="1"><span class="unit_width">$[m/s]$</span> <button
               class="change_button minus_button">-</button> <button class="change_button">+</button><br>
 
-        
-            <button id="show_laser_pror_input_file">show input files</button>
-            <button id="download_liggghts_input_button">download</button>
+            <button id="show_laser_prop_input_files">show input files</button>
+            <button id="download_laser_prop_input_button">download</button>
 
           </div>
         </div>
@@ -117,8 +125,8 @@
     </div>
 
     <button id="download_all_case_files_button">download full case</button>
-    <div id="light_theme"></div>
-    <div id="dark_theme" class="active_theme"> </div>
+    <div title="Light Theme" id="light_theme"></div>
+    <div title="Dark Theme" id="dark_theme" class="active_theme"> </div>
   </div>
 
 
@@ -128,13 +136,12 @@
     <div id="info_div_content" class="hidden">
       <span id="info_div_title_1" class="info_div_active">LIGGGHTS input file</span>
       <span id="info_div_title_2">bedPlateDict</span>
-       <span id="close_div"><img src="media/x.svg"  id="close_img"></span>
-       <span id="copy_div"><img src="media/copy.svg" id="copy_img" ></span>
-      <!-- <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="info">
+      <span id="info_div_title_3" class="hidden">timeVsLaserPower</span>
+      <span title="Close" id="close_div"><img src="media/x.svg" id="close_img"></span>
+      <span title="Copy" class="tooltip-container" id="copy_div"><img src="media/copy.svg" id="copy_img"></span>
 
-      </svg> -->
-
-      <textarea id="info_div_input" rows="20" cols="220" style="overflow-y: auto; overflow-x: auto; resize: none; white-space: pre;"></textarea>
+      <textarea id="info_div_input" rows="20" cols="220"
+        style="overflow-y: auto; overflow-x: auto; resize: none; white-space: pre;"></textarea>
     </div>
   </div>
 
@@ -147,8 +154,6 @@
 }</script>
 
   <script type="module" src="code/JS/main.js">  </script>
-
-
 
 
 </body>
