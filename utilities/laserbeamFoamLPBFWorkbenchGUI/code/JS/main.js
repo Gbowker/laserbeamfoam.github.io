@@ -1,8 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-
-
 var liggghts_or_laser_prop;
 
 // Set up the scene
@@ -107,6 +105,12 @@ var layer_thickness =
 var layer_thickness_input = document.getElementById("layer_thickness");
 
 var domain_height = parseFloat($("#domain_height").val()) || 1;
+var domain_height_input = $("#domain_height");
+var laser_pos_x_input = $("#laser_pos_x");
+var laser_pos_x_input_end = $("#laser_pos_x_end");
+
+var laser_pos_z_input = $("#laser_pos_z");
+var laser_pos_z_input_end = $("#laser_pos_z_end");
 
 // 4. Create Box Geometry
 var width = (plate_width * 3.2) / 800; // x axis
@@ -227,11 +231,6 @@ cylinder_end.position.set(x_end, y_end + cylinderHeight / 2, -z_end); // y + hei
 
 scene.add(cylinder);
 scene.add(cylinder_end);
-// Remove or comment out controls.enableDamping and controls.dampingFactor if present
-// Make sure OrbitControls is not set to "enableDamping" or "dampingFactor"
-// This will prevent the camera from orbiting in a "curved" or smooth way
-// If you want a fixed, orthogonal view, use an OrthographicCamera instead of PerspectiveCamera
-// Example (replace PerspectiveCamera with OrthographicCamera if you want a flat, non-curved look):
 
 import { STLLoader } from "three/addons/loaders/STLLoader.js";
 import { STLExporter } from "three/addons/exporters/STLExporter.js";
@@ -320,23 +319,29 @@ $("#laser_angle_yx").on("input", function () {
 
   var radius = scaleMicromToPx($("#laser_rad").val());
 
+  cylinderGeometry = new THREE.CylinderGeometry(
+    radius,
+    radius, // Convert micrometers to meters
+    cylinderHeight,
+    50
+  );
+
   scene.remove(cylinder);
+
   cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
+
   cylinder.position.set(
     x + (domain_height * Math.sin(cylinder_rot_yx)) / 2,
     y + cylinderHeight / 2,
     -(z + (y + cylinderHeight / 2) * Math.sin(cylinder_rot_yz))
   ); // y + height/2 to sit on ground
-  cylinder.position.set(
-    x + (domain_height * Math.sin(cylinder_rot_yx)) / 2,
-    y + cylinderHeight / 2,
-    -(z + (y + cylinderHeight / 2) * Math.sin(cylinder_rot_yz))
-  ); // y + height/2 to sit on ground
+
   cylinder.rotation.z = cylinder_rot_yx; // Align along Y axis
   cylinder.rotation.x = cylinder_rot_yz; // Align along Y axis
   scene.add(cylinder);
 
   scene.remove(cylinder_end);
+
   cylinder_end = new THREE.Mesh(cylinderGeometry, cylinderMaterial_end);
   cylinder_end.position.set(
     x_end + (domain_height * Math.sin(cylinder_rot_yx)) / 2,
@@ -407,37 +412,50 @@ $("#laser_rad").on("input", function () {
   // Remove the old cylinder from the scene
   scene.remove(cylinder);
 
-  // Get the new radius value and convert it
-  var newRadius = scaleMicromToPx($(this).val());
+  var domain_height = scaleMicromToPx($("#domain_height").val());
+  var x = scaleMicromToPx($("#laser_pos_x").val());
+  var z = scaleMicromToPx($("#laser_pos_z").val());
+  var cylinder_rot_yx = ($("#laser_angle_yx").val() * Math.PI) / 180;
+  var cylinder_rot_yz = ($("#laser_angle_yz").val() * Math.PI) / 180;
+  var radius = scaleMicromToPx($("#laser_rad").val());
 
-  // Create new geometry with the updated radius
-  const newCylinderGeometry = new THREE.CylinderGeometry(
-    newRadius,
-    newRadius,
-    cylinder.geometry.parameters.height,
+  cylinderGeometry = new THREE.CylinderGeometry(
+    radius,
+    radius, // Convert micrometers to meters
+    cylinderHeight,
     50
   );
 
-  // Create a new mesh with the same material
-  const newCylinder = new THREE.Mesh(newCylinderGeometry, cylinder.material);
+  scene.remove(cylinder);
+  cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
+  cylinder.position.set(
+    x + (domain_height * Math.sin(cylinder_rot_yx)) / 2,
+    y + cylinderHeight / 2,
+    -(z + (y + cylinderHeight / 2) * Math.sin(cylinder_rot_yz))
+  ); // y + height/2 to sit on ground
+  cylinder.position.set(
+    x + (domain_height * Math.sin(cylinder_rot_yx)) / 2,
+    y + cylinderHeight / 2,
+    -(z + (y + cylinderHeight / 2) * Math.sin(cylinder_rot_yz))
+  ); // y + height/2 to sit on ground
 
-  // Set the position and rotation to match the old cylinder
-  newCylinder.position.copy(cylinder.position);
-  newCylinder.rotation.copy(cylinder.rotation);
+  scene.add(cylinder);
 
-  // Add the new cylinder to the scene
-  scene.add(newCylinder);
-
-  // Update the reference to the cylinder
-  cylinder.geometry.dispose();
-  cylinder.geometry = newCylinderGeometry;
-  scene.remove(newCylinder); // Remove the duplicate
-  scene.add(cylinder); // Add the updated cylinder back
-  cylinder.scale.set(
-    newRadius / cylinder.geometry.parameters.radiusTop,
-    1,
-    newRadius / cylinder.geometry.parameters.radiusBottom
-  );
+  scene.remove(cylinder_end);
+  cylinder_end = new THREE.Mesh(cylinderGeometry, cylinderMaterial_end);
+  cylinder_end.position.set(
+    x_end + (domain_height * Math.sin(cylinder_rot_yx)) / 2,
+    y + cylinderHeight / 2,
+    -(z_end + (y + cylinderHeight / 2) * Math.sin(cylinder_rot_yx))
+  ); // y + height/2 to sit on ground
+  cylinder_end.position.set(
+    x_end + (domain_height * Math.sin(cylinder_rot_yx)) / 2,
+    y + cylinderHeight / 2,
+    -(z_end + (y + cylinderHeight / 2) * Math.sin(cylinder_rot_yz))
+  ); // y + height/2 to sit on ground
+  cylinder_end.rotation.z = cylinder_rot_yx; // Align along Y axis
+  cylinder_end.rotation.x = cylinder_rot_yz; // Align along Y axis
+  scene.add(cylinder_end);
 });
 
 $(plate_width_input).on("input", function () {
@@ -453,6 +471,26 @@ $(plate_length_input).on("input", function () {
 });
 
 $(layer_thickness_input).on("input", function () {
+  updateDisplay();
+});
+
+$(domain_height_input).on("input", function () {
+  updateDisplay();
+});
+
+$(laser_pos_x_input).on("input", function () {
+  updateDisplay();
+});
+
+$(laser_pos_x_input_end).on("input", function () {
+  updateDisplay();
+});
+
+$(laser_pos_z_input).on("input", function () {
+  updateDisplay();
+});
+
+$(laser_pos_z_input_end).on("input", function () {
   updateDisplay();
 });
 
@@ -805,6 +843,30 @@ $(function () {
     "down",
     document.getElementById("laser_angle_yx")
   );
+
+  holdButton(
+    $("#laser_power_minus"),
+    "down",
+    document.getElementById("laser_power")
+  );
+
+  holdButton(
+    $("#laser_power_plus"),
+    "up",
+    document.getElementById("laser_power")
+  );
+
+  holdButton(
+    $("#scanning_speed_minus"),
+    "down",
+    document.getElementById("scanning_speed")
+  );
+
+  holdButton(
+    $("#scanning_speed_plus"),
+    "up",
+    document.getElementById("scanning_speed")
+  );
 });
 
 document
@@ -1044,11 +1106,7 @@ zmax ${parseFloat($("#plate_height").val()) / 1000000};
     document.body.removeChild(link);
   });
 
-
-
-
 function generateLiggghtsInput(width, height, length, layer_thickness) {
-
   var liggghts_input = `# Trial run of Powder loading
 
 atom_style		granular
@@ -1179,7 +1237,6 @@ run			750000 upto
 }
 
 function generateBedPlateDict() {
-
   var width = parseFloat($("#plate_width").val()) / 1000000;
   var height = parseFloat($("#plate_height").val()) / 1000000;
   var length = parseFloat($("#plate_length").val()) / 1000000;
@@ -1253,11 +1310,8 @@ $("#copy_div").on("click", function () {
     });
 });
 
-
 function generateLaserPropInputFiles() {
-
-var radius = $("#laser_rad").val();
-
+  var radius = $("#laser_rad").val();
 
   var laser_prop_input = `/*--------------------------------*- C++ -*----------------------------------*
   \=========                 |
@@ -1323,31 +1377,27 @@ PowderSim true;
 // elec_resistivity	1.0e-6;
 
 // Radius_Flavour	3.0;
-`
-
+`;
 
   return laser_prop_input;
 }
 
-
 function generateTimeVsLaserPosition() {
-
   var x = parseInt($("#laser_pos_x").val());
   var z = parseInt($("#laser_pos_z").val());
-  var x_end= parseInt($("#laser_pos_x_end").val());
-  var z_end= parseInt($("#laser_pos_z_end").val());
-  
+  var x_end = parseInt($("#laser_pos_x_end").val());
+  var z_end = parseInt($("#laser_pos_z_end").val());
+
   var timeVsLaserPosition = `(
   (0          (${x}e-6  20e-6  ${z}e-6))
   (600e-6     (${x_end}e-6  20e-6  ${z_end}e-6))
   (1000e-6    (${x_end}e-6  20e-6  ${z_end}e-6))
-)`
+)`;
 
   return timeVsLaserPosition;
 }
 
 function generateTimeVsLaserPower() {
-
   var laserPower = parseInt($("#laser_power").val());
   var timeVsLaserPower = `(
   (0                 0)
@@ -1355,29 +1405,27 @@ function generateTimeVsLaserPower() {
   (600e-6           ${laserPower})
   (600.001e-6       0  )
   (1000e-6          0  )
-)`
+)`;
 
   return timeVsLaserPower;
 }
 
-
 $("#show_liggghts_input_file").on("click", function () {
+  $("#info_div_title_3").addClass("hidden");
 
-    $("#info_div_title_3").addClass("hidden");
+  liggghts_or_laser_prop = "liggghts";
 
-    liggghts_or_laser_prop = "liggghts";
+  $("#info_div").removeClass("hidden");
+  $("#info_div").addClass("revealed");
 
-    $("#info_div").removeClass("hidden");
-    $("#info_div").addClass("revealed");
+  $("#info_div_content").removeClass("hidden");
+  $("#info_div_content").addClass("revealed");
 
-    $("#info_div_content").removeClass("hidden");
-    $("#info_div_content").addClass("revealed");
-    
-    $("#info_div_title_1").text("LIGGGHTS Input File");
-    $("#info_div_title_2").text("bedPlateDict");
+  $("#info_div_title_1").text("LIGGGHTS Input File");
+  $("#info_div_title_2").text("bedPlateDict");
 
-    $("#info_div_title_1").addClass("info_div_active");
-    $("#info_div_title_2").removeClass("info_div_active");
+  $("#info_div_title_1").addClass("info_div_active");
+  $("#info_div_title_2").removeClass("info_div_active");
 
   $("#info_div_input").val(
     generateLiggghtsInput(
@@ -1389,12 +1437,9 @@ $("#show_liggghts_input_file").on("click", function () {
       )
     )
   );
-      
 });
 
-
 $("#show_laser_prop_input_files").on("click", function () {
-
   liggghts_or_laser_prop = "laser_prop";
 
   $("#info_div_title_3").removeClass("hidden");
@@ -1408,62 +1453,47 @@ $("#show_laser_prop_input_files").on("click", function () {
   $("#info_div_title_1").addClass("info_div_active");
   $("#info_div_title_2").removeClass("info_div_active");
   $("#info_div_title_3").removeClass("info_div_active");
-
-})
-
+});
 
 $("#info_div_title_1").on("click", function () {
-
   $("#info_div_title_1").addClass("info_div_active");
   $("#info_div_title_2").removeClass("info_div_active");
   $("#info_div_title_3").removeClass("info_div_active");
 
-
-  if(liggghts_or_laser_prop === "liggghts") {
-
-  $("#info_div_input").val(
-    generateLiggghtsInput(
-      parseFloat($("#plate_width").val()) / 10000,
-      parseFloat(
-        $("#plate_height").val() / 10000,
-        parseFloat($("#plate_length").val()) / 10000,
-        parseFloat($("#layer_thickness").val()) / 10000
+  if (liggghts_or_laser_prop === "liggghts") {
+    $("#info_div_input").val(
+      generateLiggghtsInput(
+        parseFloat($("#plate_width").val()) / 10000,
+        parseFloat(
+          $("#plate_height").val() / 10000,
+          parseFloat($("#plate_length").val()) / 10000,
+          parseFloat($("#layer_thickness").val()) / 10000
+        )
       )
-    )
-  );
-
-  }else{
+    );
+  } else {
     $("#info_div_input").val(generateLaserPropInputFiles());
   }
-
 });
 
 $("#info_div_title_2").on("click", function () {
-  
   $("#info_div_title_1").removeClass("info_div_active");
   $("#info_div_title_3").removeClass("info_div_active");
   $("#info_div_title_2").addClass("info_div_active");
 
-  if(liggghts_or_laser_prop === "liggghts") {
-    $("#info_div_input").val(
-      generateBedPlateDict()
-    );
-  }else{
+  if (liggghts_or_laser_prop === "liggghts") {
+    $("#info_div_input").val(generateBedPlateDict());
+  } else {
     $("#info_div_input").val(generateTimeVsLaserPosition());
   }
-
 });
 
-
 $("#info_div_title_3").on("click", function () {
-  
   $("#info_div_title_1").removeClass("info_div_active");
   $("#info_div_title_2").removeClass("info_div_active");
   $("#info_div_title_3").addClass("info_div_active");
   $("#info_div_input").val(generateTimeVsLaserPower());
-
 });
-
 
 document
   .getElementById("download_laser_prop_input_button")
@@ -1471,10 +1501,19 @@ document
     const zip = new JSZip();
 
     // Simulate folder and files
-    zip.folder("OF_laser_prop_files").file("OpenFOAM/constant/LaserProperties", generateLaserPropInputFiles());
-    zip.folder("OF_laser_prop_files").file("OpenFOAM/constant/timeVsLaserPosition", generateTimeVsLaserPosition());
-    zip.folder("OF_laser_prop_files").file("OpenFOAM/constant/timeVsLaserPower", generateTimeVsLaserPower());
-  
+    zip
+      .folder("OF_laser_prop_files")
+      .file("OpenFOAM/constant/LaserProperties", generateLaserPropInputFiles());
+    zip
+      .folder("OF_laser_prop_files")
+      .file(
+        "OpenFOAM/constant/timeVsLaserPosition",
+        generateTimeVsLaserPosition()
+      );
+    zip
+      .folder("OF_laser_prop_files")
+      .file("OpenFOAM/constant/timeVsLaserPower", generateTimeVsLaserPower());
+
     // Create zip file
     const blob = await zip.generateAsync({ type: "blob" });
 
@@ -1487,19 +1526,19 @@ document
     document.body.removeChild(link);
   });
 
-
 document
   .getElementById("download_all_case_files_button")
   .addEventListener("click", async () => {
     const zip = new JSZip();
 
-  var liggghts_input = generateLiggghtsInput(
-    parseFloat($("#plate_width").val()) / 10000,
-    parseFloat(
-      $("#plate_height").val() / 10000,
-      parseFloat($("#plate_length").val()) / 10000,
-      parseFloat($("#layer_thickness").val()) / 10000
-    ))
+    var liggghts_input = generateLiggghtsInput(
+      parseFloat($("#plate_width").val()) / 10000,
+      parseFloat(
+        $("#plate_height").val() / 10000,
+        parseFloat($("#plate_length").val()) / 10000,
+        parseFloat($("#layer_thickness").val()) / 10000
+      )
+    );
 
     var bedPlateDict = generateBedPlateDict();
 
@@ -1550,27 +1589,131 @@ document
     const stl_string_domain = exporter.parse(export_mesh_domain);
 
     // Simulate folder and files
-    zip.folder("OF_and_LIGGGHTS_case_files").file("LIGGGHTS/liggghts.in", liggghts_input);
-    zip.folder("OF_and_LIGGGHTS_case_files").file("LIGGGHTS/mesh/plate.stl", stl_string_box);
-    zip.folder("OF_and_LIGGGHTS_case_files").file("LIGGGHTS/mesh/domain.stl", stl_string_domain);
+    zip
+      .folder("case_files")
+      .file("LIGGGHTS/liggghts.in", liggghts_input);
+    zip
+      .folder("case_files")
+      .file("LIGGGHTS/mesh/plate.stl", stl_string_box);
+    zip
+      .folder("case_files")
+      .file("LIGGGHTS/mesh/domain.stl", stl_string_domain);
 
-    zip.folder("OF_and_LIGGGHTS_case_files").file("OpenFOAM/system/bedPlateDict", bedPlateDict);
-    zip.folder("OF_and_LIGGGHTS_case_files").file("OpenFOAM/constant/LaserProperties", generateLaserPropInputFiles());
-    zip.folder("OF_and_LIGGGHTS_case_files").file("OpenFOAM/constant/timeVsLaserPosition", generateTimeVsLaserPosition());
-    zip.folder("OF_and_LIGGGHTS_case_files").file("OpenFOAM/constant/timeVsLaserPower", generateTimeVsLaserPower());
-  
+    zip
+      .folder("case_files")
+      .file("OpenFOAM/system/bedPlateDict", bedPlateDict);
+    zip
+      .folder("case_files")
+      .file("OpenFOAM/constant/LaserProperties", generateLaserPropInputFiles());
+    zip
+      .folder("case_files")
+      .file(
+        "OpenFOAM/constant/timeVsLaserPosition",
+        generateTimeVsLaserPosition()
+      );
+    zip
+      .folder("case_files")
+      .file("OpenFOAM/constant/timeVsLaserPower", generateTimeVsLaserPower());
+
     // Create zip file
     const blob = await zip.generateAsync({ type: "blob" });
 
     // Trigger download
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = "OF_and_LIGGGHTS_case_files.zip";
+    link.download = "case_files.zip";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   });
 
+// Track the animation frame ID globally so it can be cancelled
+let laserAnimationFrameId = null;
 
+$("#run_button").on("click", function () {
+  $(this).addClass("flash-white");
+  setTimeout(() => {
+    $(this).removeClass("flash-white");
+  }, 100); // 0.1 seconds
 
-  
+  var x_start = parseFloat($("#laser_pos_x").val());
+  var x_end = parseFloat($("#laser_pos_x_end").val());
+  var z_start = parseFloat($("#laser_pos_z").val());
+  var z_end = parseFloat($("#laser_pos_z_end").val());
+  var scanning_speed = parseFloat($("#scanning_speed").val());
+
+  var steps = Math.floor((200 * 1) / scanning_speed);
+
+  var step_x = (x_end - x_start) / steps;
+  var step_z = (z_end - z_start) / steps;
+
+  var x = x_start;
+  var z = z_start;
+  var counter = 0;
+
+  var cylinder_rot_yx =
+    parseFloat($("#laser_angle_yx").val()) * (Math.PI / 180);
+  var cylinder_rot_yz =
+    parseFloat($("#laser_angle_yz").val()) * (Math.PI / 180);
+
+  var domain_height = (parseFloat($("#domain_height").val()) * 3.2) / 800;
+
+  function animateLaser() {
+    if (counter > steps) {
+      laserAnimationFrameId = null;
+      return;
+    }
+
+    cylinder.position.set(
+      scaleMicromToPx(x) + (domain_height * Math.sin(cylinder_rot_yx)) / 2,
+      y + cylinderHeight / 2,
+      -(
+        scaleMicromToPx(z) +
+        (y + cylinderHeight / 2) * Math.sin(cylinder_rot_yz)
+      )
+    ); // y + height/2 to sit on ground
+
+    x += step_x;
+    z += step_z;
+    counter++;
+    laserAnimationFrameId = requestAnimationFrame(animateLaser);
+  }
+
+  // Cancel any previous animation before starting a new one
+  if (laserAnimationFrameId !== null) {
+    cancelAnimationFrame(laserAnimationFrameId);
+    laserAnimationFrameId = null;
+  }
+
+  animateLaser();
+});
+
+$("#reset_button").on("click", function () {
+  $(this).addClass("flash-white");
+  setTimeout(() => {
+    $(this).removeClass("flash-white");
+  }, 100); // 0.1 seconds
+
+  // Cancel the laser animation if running
+  if (laserAnimationFrameId !== null) {
+    cancelAnimationFrame(laserAnimationFrameId);
+    laserAnimationFrameId = null;
+  }
+
+  var x_start = parseFloat($("#laser_pos_x").val());
+  var z_start = parseFloat($("#laser_pos_z").val());
+  var domain_height = (parseFloat($("#domain_height").val()) * 3.2) / 800;
+  var cylinder_rot_yx =
+    parseFloat($("#laser_angle_yx").val()) * (Math.PI / 180);
+  var cylinder_rot_yz =
+    parseFloat($("#laser_angle_yz").val()) * (Math.PI / 180);
+
+  cylinder.position.set(
+    scaleMicromToPx(x_start) + (domain_height * Math.sin(cylinder_rot_yx)) / 2,
+    y + cylinderHeight / 2,
+    -(
+      scaleMicromToPx(z_start) +
+      (y + cylinderHeight / 2) * Math.sin(cylinder_rot_yz)
+    )
+  );
+});

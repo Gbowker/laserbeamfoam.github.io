@@ -18,6 +18,7 @@
     }
 
     #displays {
+      position: relative;
       width: 60%;
       height: 850px;
     }
@@ -291,7 +292,8 @@
     #show_laser_prop_input_files,
     #align-button,
     #download_liggghts_input_button,
-    #download_all_case_files_button,#download_laser_prop_input_button {
+    #download_all_case_files_button,
+    #download_laser_prop_input_button {
       color: #fff;
       background: #2e85c7;
       cursor: pointer;
@@ -320,7 +322,8 @@
     }
 
     #download_liggghts_input_button,
-    #download_all_case_files_button,#download_laser_prop_input_button {
+    #download_all_case_files_button,
+    #download_laser_prop_input_button {
       color: #fff;
       background: #636363;
       border: 2px solid #1c1c1c;
@@ -328,7 +331,8 @@
     }
 
     #download_liggghts_input_button:not([disabled]):hover,
-    #download_all_case_files_button:not([disabled]):hover,#download_laser_prop_input_button:not([disabled]):hover {
+    #download_all_case_files_button:not([disabled]):hover,
+    #download_laser_prop_input_button:not([disabled]):hover {
       color: #000000;
       background: #fff;
     }
@@ -460,7 +464,8 @@
     }
 
     #info_div_title_1:hover,
-    #info_div_title_2:hover, #info_div_title_3:hover {
+    #info_div_title_2:hover,
+    #info_div_title_3:hover {
       cursor: pointer;
     }
 
@@ -556,4 +561,40 @@
       /* Firefox */
       -ms-user-select: none;
       /* IE/Edge */
+    }
+
+
+    #reset_button {
+      position: absolute;
+      bottom: 29px;
+      left: 47px;
+      width: 26px;
+      /* background-color: #2e85c7; */
+      height: 26px;
+    }
+
+    #run_button {
+      position: absolute;
+      left: 10px;
+      bottom: 25px;
+      width: 35px;
+      height: 35px;
+    }
+
+    #run_button:hover,
+    #reset_button:hover {
+      /* filter: brightness(100%) saturate(0%) invert(100%) sepia(0%) saturate(7492%) hue-rotate(1deg); */
+      cursor: pointer;
+      scale: 1.1;
+      /* filter: brightness(1000%) invert(0%) sepia(0%) saturate(0%); white */
+      /* filter:grayscale(0.5); */
+      transition: all 0.1s ease-in-out;
+      filter: brightness(10000%) invert(50%) sepia(0%) saturate(0%); 
+
+    }
+
+    .flash-white,
+    #run_button.flash-white:hover,
+    #reset_button.flash-white:hover {
+      filter: brightness(10000%) invert(0%) sepia(0%) saturate(0%);
     }

@@ -28,7 +28,6 @@
 
       <div id="settings_tab">
 
-
         <div id="liggghts_input_container">
           <span id="section_title">LIGGGHTS DEM</span>
 
@@ -105,11 +104,11 @@
 
             <span class="span_input_name">Laser power $</span><input id="laser_power" class="stress_input" type="number"
               placeholder="tauyx" value="150"><span class="unit_width">$[W]$</span> <button
-              class="change_button minus_button">-</button> <button class="change_button">+</button><br>
+              class="change_button minus_button" id="laser_power_minus">-</button> <button class="change_button" id="laser_power_plus">+</button><br>
 
-            <span class="span_input_name">Scanning speed $</span><input id="laser_rad" class="stress_input"
+            <span class="span_input_name">Scanning speed $</span><input id="scanning_speed" class="stress_input"
               type="number" placeholder="tauyx" value="1"><span class="unit_width">$[m/s]$</span> <button
-              class="change_button minus_button">-</button> <button class="change_button">+</button><br>
+              class="change_button minus_button" id="scanning_speed_minus">-</button> <button class="change_button" id="scanning_speed_plus">+</button><br>
 
             <button id="show_laser_prop_input_files">show input files</button>
             <button id="download_laser_prop_input_button">download</button>
@@ -121,12 +120,16 @@
 
       <div id="displays">
         <div id="laser_position_window"></div>
+        <!-- Add a CSS filter to change the color of the SVG image -->
+        <img id="run_button" src="media/run.svg" ></img>
+        <img id="reset_button" src="media/reset.svg" ></img>
       </div>
     </div>
 
     <button id="download_all_case_files_button">download full case</button>
     <div title="Light Theme" id="light_theme"></div>
     <div title="Dark Theme" id="dark_theme" class="active_theme"> </div>
+
   </div>
 
 
