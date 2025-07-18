@@ -202,14 +202,6 @@ const cylinderMaterial_end = new THREE.MeshStandardMaterial({
   transparent: true,
 });
 
-// By default, the origin of rotation for a THREE.Mesh (like cylinder) is its local (0,0,0) position.
-// For CylinderGeometry, this is at the center of the cylinder along its height.
-// If you want to rotate around the base (bottom) of the cylinder instead of the center,
-// you need to shift the geometry so that the base is at y=0 (or whichever axis is "up" in your scene).
-
-// Move the geometry so the base is at y=0 (instead of center at y=0)
-// cylinderGeometry.translate(0, 0 , 0);
-
 var cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
 var cylinder_end = new THREE.Mesh(cylinderGeometry, cylinderMaterial_end);
 
@@ -874,204 +866,40 @@ document
   .addEventListener("click", async () => {
     const zip = new JSZip();
 
-    var liggghts_input = `# Trial run of Powder loading
+    var liggghts_input = generateLiggghtsInput();
+    var bedPlateDict = generateBedPlateDict();
 
-atom_style		granular
-atom_modify		map	array
-boundary		m	m	m
-newton			off
-
-communicate		single vel yes
-
-units 			cgs
-
-region			domain block 0.0 ${parseFloat($("#plate_width").val()) / 10000} 0.0 ${
-      parseFloat($("#plate_length").val()) / 10000
-    } 0.0 ${
-      ((parseFloat($("#plate_height").val()) +
-        parseFloat($("#layer_thickness").val())) *
-        3.33) /
-      10000
-    } units box
-
-create_box		1 domain
-
-neighbor		0.008101 bin
-neigh_modify	delay 1
-
-### Setup
-
-# Material and Interaction Properties
-fix 		m1 all property/global youngsModulus peratomtype 5e7
-fix 		m2 all property/global poissonsRatio peratomtype 0.45
-fix 		m3 all property/global coefficientRestitution peratomtypepair 1 0.1
-fix 		m4 all property/global coefficientFriction peratomtypepair 1 0.065
-
-# New pair style
-pair_style gran model hertz tangential history #Hertzian without cohesion
-pair_coeff	* *
-
-# Integrator
-fix			integrate all nve/sphere
-
-# Time step
-timestep	0.00000005
-
-# Gravity
-fix		grav all gravity 981 vector 0.0 0.0 -1.0
-
-# Particle Insertion
-fix				pts1 all particletemplate/sphere 15485863 atom_type 1 density constant 4.43 &
-				radius constant 0.0004625
-fix				pts2 all particletemplate/sphere 154849 atom_type 1 density constant 4.43 &
-				radius constant 0.000525
-fix				pts3 all particletemplate/sphere 49979687 atom_type 1 density constant 4.43 &
-				radius constant 0.0005965
-fix				pts4 all particletemplate/sphere 15485867 atom_type 1 density constant 4.43 &
-				radius constant 0.000678
-fix				pts5 all particletemplate/sphere 32452843 atom_type 1 density constant 4.43 &
-				radius constant 0.0007705	
-fix				pts6 all particletemplate/sphere 32452867 atom_type 1 density constant 4.43 &
-				radius constant 0.0008755	
-fix				pts7 all particletemplate/sphere 67867979 atom_type 1 density constant 4.43 &
-				radius constant 0.0009945
-fix				pts8 all particletemplate/sphere 86028121 atom_type 1 density constant 4.43 &
-				radius constant 0.0011301
-fix				pts9 all particletemplate/sphere 16193 atom_type 1 density constant 4.43 &
-				radius constant 0.001284
-fix				pts10 all particletemplate/sphere 17167 atom_type 1 density constant 4.43 &
-				radius constant 0.00145885
-fix				pts11 all particletemplate/sphere 16981 atom_type 1 density constant 4.43 &
-				radius constant 0.0016575
-fix				pts12 all particletemplate/sphere 17609 atom_type 1 density constant 4.43 &
-				radius constant 0.00188315
-fix				pts13 all particletemplate/sphere 67867967 atom_type 1 density constant 4.43 &
-				radius constant 0.0021395
-fix				pts14 all particletemplate/sphere 49979693 atom_type 1 density constant 4.43 &
-				radius constant 0.0024309			
-fix				pts15 all particletemplate/sphere 31891 atom_type 1 density constant 4.43 &
-				radius constant 0.002762	
-fix				pts16 all particletemplate/sphere 31223 atom_type 1 density constant 4.43 &
-				radius constant 0.003138	
-fix				pts17 all particletemplate/sphere 27191 atom_type 1 density constant 4.43 &
-				radius constant 0.00356531	
-fix				pts18 all particletemplate/sphere 27751 atom_type 1 density constant 4.43 &
-				radius constant 0.0040505	
-
-fix 				pdd all particledistribution/discrete 78593 18 pts1 1.97883E-06 pts2 0.000158863 pts3 0.002123547 pts4 0.009419927 &
-				pts5 0.024542522 pts6 0.047522205 pts7 0.07564377 pts8 0.103955961 pts9 0.126582204 pts10 0.138350101 pts11 0.136320196 &
-				pts12 0.120736947 pts13 0.095077524 pts14 0.065101351 pts15 0.037187843 pts16 0.015932988 pts17 0.001336914 pts18 5.1597E-06
-
-
-region 				factory block 0.0 0.01 0.0 0.015 0.02 0.1 units box
-fix 				ins all insert/rate/region seed 51869 distributiontemplate pdd &
-				nparticles 240 particlerate 200000 insert_every 5 &
-				overlapcheck yes vel constant 0. 0. 0.0 region factory ntry_mc 10000
-				
-			
-# Boundary
-fix box all mesh/surface file meshes/domain.stl type 1 scale 0.1 curvature 1e-5
-fix plate all mesh/surface file meshes/plate.stl type 1 scale 0.1 curvature 1e-5
-fix wall all wall/gran model hertz tangential history mesh n_meshes 2  meshes box plate
-
-variable x1 atom x*0.01
-variable y1 atom y*0.01
-variable z1 atom z*0.01
-
-compute 1 all property/atom radius
-variable rad1 atom "c_1*0.01"
-
-# Check time step and initialize dump file
-#fix ctg all check/timestep/gran 1 0.01 0.01
-run 1
-#unfix ctg
-
-#insert the first particles so that dump is not empty
-dump		dmp all custom/vtk 7500 post/trial_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius
-dump		mydump all custom 750000 post/location v_x1 v_y1 v_z1 v_rad1
-dump		mydump2 all custom 750000 post/parDist.xls v_rad1
-
-run			500000 upto
-
-compute         2 all reduce sum c_1
-thermo_style    custom step c_2
-run             0
-variable        co atom "z+c_1 > ${
-      (parseFloat($("#plate_height").val()) +
-        parseFloat($("#layer_thickness").val())) /
-      10000
-    }"
-group           layer variable co
-
-
-delete_atoms group layer compress yes
-
-# Initial stage
-run			750000 upto
-
-`;
-
-    var bedPlateDict = `/*--------------------------------*- C++ -*----------------------------------*
-| =========                 |                                                |
-| \\      /  F ield         | foam-extend: Open Source CFD                    |
-|  \\    /   O peration     | Version:     4.0                                |
-|   \\  /    A nd           | Web:         http://www.foam-extend.org         |
-|    \\/     M anipulation  |                                                 |
-\*---------------------------------------------------------------------------*/
-FoamFile
-{
-    version     2.0;
-    format      ascii;
-    class       dictionary;
-    location    "system";
-    object      bedPlateDict;
-}
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-Bed true;
-
-xmin 0.0;
-xmax ${parseFloat($("#plate_width").val()) / 1000000};
-
-ymin 0.0;
-ymax ${parseFloat($("#plate_length").val()) / 1000000};
-
-zmin 0.0;
-zmax ${parseFloat($("#plate_height").val()) / 1000000};
-
-// ************************************************************************* //`;
+    var width_mm = parseFloat($("#plate_width").val()) / 1000;
+    var height_mm = parseFloat($("#plate_height").val()) / 1000;
+    var length_mm = parseFloat($("#plate_length").val()) / 1000;
+    var layer_thickness_mm = parseFloat($("#layer_thickness").val()) / 1000;
 
     // Create a mesh from the box geometry (not the edges)
     // Plate geometry
     const export_geometry_box = new THREE.BoxGeometry(
-      parseFloat($("#plate_width").val()),
-      parseFloat($("#plate_height").val()),
-      parseFloat($("#plate_length").val())
-    );
+      width_mm,
+      length_mm,
+      height_mm
+      );
 
     // Move so that the minimum corner is at (0,0,0)
     export_geometry_box.translate(
-      parseFloat($("#plate_width").val()) / 2,
-      parseFloat($("#plate_height").val()) / 2,
-      parseFloat($("#plate_length").val()) / 2
+      width_mm / 2,
+      length_mm / 2,
+      height_mm / 2
     );
 
     // Domain geometry
     const export_geometry_domain = new THREE.BoxGeometry(
-      parseFloat($("#plate_width").val()),
-      (parseFloat($("#plate_height").val()) +
-        parseFloat($("#layer_thickness").val())) *
-        3.33,
-      parseFloat($("#plate_length").val())
+      width_mm,
+       length_mm,
+       (height_mm + layer_thickness_mm)*3.33
     );
     // Move so that the minimum corner is at (0,0,0)
     export_geometry_domain.translate(
-      parseFloat($("#plate_width").val()) / 2,
-      ((parseFloat($("#plate_height").val()) +
-        parseFloat($("#layer_thickness").val())) *
-        3.33) /
-        2,
-      parseFloat($("#plate_length").val()) / 2
+     width_mm/ 2,
+       length_mm / 2,
+       (height_mm + layer_thickness_mm)*3.33/2
     );
 
     const export_mesh_box = new THREE.Mesh(
@@ -1106,7 +934,17 @@ zmax ${parseFloat($("#plate_height").val()) / 1000000};
     document.body.removeChild(link);
   });
 
-function generateLiggghtsInput(width, height, length, layer_thickness) {
+function generateLiggghtsInput() {
+
+  var width = parseFloat($("#plate_width").val()) / 10000;
+  var length = parseFloat($("#plate_length").val()) / 10000;
+  var layer_thickness = parseFloat($("#layer_thickness").val()) / 10000;
+  var plate_height = parseFloat($("#plate_height").val()) / 10000;
+
+  var nparticles_scale = 2000/(0.02*0.08*0.03);
+  
+  var nparticles = Math.ceil((width*length*(plate_height + layer_thickness)*(3.33-1.5)) * nparticles_scale); // Scale the particle rate based on the plate size
+
   var liggghts_input = `# Trial run of Powder loading
 
 atom_style		granular
@@ -1118,7 +956,7 @@ communicate		single vel yes
 
 units 			cgs
 
-region			domain block 0.0 ${width} 0.0 ${length} 0.0 ${height} units box
+region			domain block 0.0 ${width} 0.0 ${length} 0.0 ${(plate_height + layer_thickness)*3.33} units box
 
 create_box		1 domain
 
@@ -1189,15 +1027,15 @@ fix 				pdd all particledistribution/discrete 78593 18 pts1 1.97883E-06 pts2 0.0
 				pts12 0.120736947 pts13 0.095077524 pts14 0.065101351 pts15 0.037187843 pts16 0.015932988 pts17 0.001336914 pts18 5.1597E-06
 
 
-region 				factory block 0.0 0.01 0.0 0.015 0.02 0.1 units box
+region 				factory block 0.0 ${width} 0.0 ${length} ${(plate_height+layer_thickness)*1.5} ${(plate_height + layer_thickness)*3.33} units box
 fix 				ins all insert/rate/region seed 51869 distributiontemplate pdd &
-				nparticles 240 particlerate 200000 insert_every 5 &
+				nparticles ${nparticles} particlerate 200000 insert_every 5 &
 				overlapcheck yes vel constant 0. 0. 0.0 region factory ntry_mc 10000
 				
 			
 # Boundary
-fix box all mesh/surface file meshes/domain.stl type 1 scale 0.1 curvature 1e-5
-fix plate all mesh/surface file meshes/plate.stl type 1 scale 0.1 curvature 1e-5
+fix box all mesh/surface file mesh/domain.stl type 1 scale 0.1 curvature 1e-5
+fix plate all mesh/surface file mesh/plate.stl type 1 scale 0.1 curvature 1e-5
 fix wall all wall/gran model hertz tangential history mesh n_meshes 2  meshes box plate
 
 variable x1 atom x*0.01
@@ -1222,7 +1060,7 @@ run			500000 upto
 compute         2 all reduce sum c_1
 thermo_style    custom step c_2
 run             0
-variable        co atom "z+c_1 > ${height + layer_thickness}"
+variable        co atom "z+c_1 > ${plate_height + layer_thickness}"
 group           layer variable co
 
 
@@ -1428,14 +1266,7 @@ $("#show_liggghts_input_file").on("click", function () {
   $("#info_div_title_2").removeClass("info_div_active");
 
   $("#info_div_input").val(
-    generateLiggghtsInput(
-      parseFloat($("#plate_width").val()) / 10000,
-      parseFloat(
-        $("#plate_height").val() / 10000,
-        parseFloat($("#plate_length").val()) / 10000,
-        parseFloat($("#layer_thickness").val()) / 10000
-      )
-    )
+    generateLiggghtsInput()
   );
 });
 
@@ -1462,14 +1293,7 @@ $("#info_div_title_1").on("click", function () {
 
   if (liggghts_or_laser_prop === "liggghts") {
     $("#info_div_input").val(
-      generateLiggghtsInput(
-        parseFloat($("#plate_width").val()) / 10000,
-        parseFloat(
-          $("#plate_height").val() / 10000,
-          parseFloat($("#plate_length").val()) / 10000,
-          parseFloat($("#layer_thickness").val()) / 10000
-        )
-      )
+      generateLiggghtsInput()
     );
   } else {
     $("#info_div_input").val(generateLaserPropInputFiles());
@@ -1531,14 +1355,7 @@ document
   .addEventListener("click", async () => {
     const zip = new JSZip();
 
-    var liggghts_input = generateLiggghtsInput(
-      parseFloat($("#plate_width").val()) / 10000,
-      parseFloat(
-        $("#plate_height").val() / 10000,
-        parseFloat($("#plate_length").val()) / 10000,
-        parseFloat($("#layer_thickness").val()) / 10000
-      )
-    );
+    var liggghts_input = generateLiggghtsInput();
 
     var bedPlateDict = generateBedPlateDict();
 
@@ -1546,33 +1363,33 @@ document
     // Plate geometry
     const export_geometry_box = new THREE.BoxGeometry(
       parseFloat($("#plate_width").val()),
-      parseFloat($("#plate_height").val()),
-      parseFloat($("#plate_length").val())
+      parseFloat($("#plate_length").val()),
+      parseFloat($("#plate_height").val())
     );
 
     // Move so that the minimum corner is at (0,0,0)
     export_geometry_box.translate(
       parseFloat($("#plate_width").val()) / 2,
-      parseFloat($("#plate_height").val()) / 2,
-      parseFloat($("#plate_length").val()) / 2
+      parseFloat($("#plate_length").val()) / 2,
+      parseFloat($("#plate_height").val()) / 2
     );
 
     // Domain geometry
     const export_geometry_domain = new THREE.BoxGeometry(
       parseFloat($("#plate_width").val()),
+      parseFloat($("#plate_length").val()),
       (parseFloat($("#plate_height").val()) +
         parseFloat($("#layer_thickness").val())) *
-        3.33,
-      parseFloat($("#plate_length").val())
+        3.33
     );
     // Move so that the minimum corner is at (0,0,0)
     export_geometry_domain.translate(
       parseFloat($("#plate_width").val()) / 2,
+      parseFloat($("#plate_length").val()) / 2,
       ((parseFloat($("#plate_height").val()) +
         parseFloat($("#layer_thickness").val())) *
         3.33) /
-        2,
-      parseFloat($("#plate_length").val()) / 2
+        2
     );
 
     const export_mesh_box = new THREE.Mesh(
