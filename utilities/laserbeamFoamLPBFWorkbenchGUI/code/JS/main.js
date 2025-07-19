@@ -880,26 +880,22 @@ document
       width_mm,
       length_mm,
       height_mm
-      );
+    );
 
     // Move so that the minimum corner is at (0,0,0)
-    export_geometry_box.translate(
-      width_mm / 2,
-      length_mm / 2,
-      height_mm / 2
-    );
+    export_geometry_box.translate(width_mm / 2, length_mm / 2, height_mm / 2);
 
     // Domain geometry
     const export_geometry_domain = new THREE.BoxGeometry(
       width_mm,
-       length_mm,
-       (height_mm + layer_thickness_mm)*3.33
+      length_mm,
+      (height_mm + layer_thickness_mm) * 3.33
     );
     // Move so that the minimum corner is at (0,0,0)
     export_geometry_domain.translate(
-     width_mm/ 2,
-       length_mm / 2,
-       (height_mm + layer_thickness_mm)*3.33/2
+      width_mm / 2,
+      length_mm / 2,
+      ((height_mm + layer_thickness_mm) * 3.33) / 2
     );
 
     const export_mesh_box = new THREE.Mesh(
@@ -935,15 +931,28 @@ document
   });
 
 function generateLiggghtsInput() {
-
   var width = parseFloat($("#plate_width").val()) / 10000;
   var length = parseFloat($("#plate_length").val()) / 10000;
   var layer_thickness = parseFloat($("#layer_thickness").val()) / 10000;
   var plate_height = parseFloat($("#plate_height").val()) / 10000;
 
-  var nparticles_scale = 2000/(0.02*0.08*0.03);
-  
-  var nparticles = Math.ceil((width*length*(plate_height + layer_thickness)*(3.33-1.5)) * nparticles_scale); // Scale the particle rate based on the plate size
+  var nparticles_scale = 2000 / (0.02 * 0.08 * 0.03);
+  var particlerate_scale = 200000 / (0.02 * 0.08 * 0.03);
+
+  var nparticles = Math.ceil(
+    width *
+      length *
+      (plate_height + layer_thickness) *
+      (3.33 - 1.5) *
+      nparticles_scale
+  ); // Scale the particle rate based on the plate size
+  var particlerate = Math.ceil(
+    width *
+      length *
+      (plate_height + layer_thickness) *
+      (3.33 - 1.5) *
+      particlerate_scale
+  ); // Scale the particle rate based on the plate size
 
   var liggghts_input = `# Trial run of Powder loading
 
@@ -956,7 +965,9 @@ communicate		single vel yes
 
 units 			cgs
 
-region			domain block 0.0 ${width} 0.0 ${length} 0.0 ${(plate_height + layer_thickness)*3.33} units box
+region			domain block 0.0 ${width} 0.0 ${length} 0.0 ${
+    (plate_height + layer_thickness) * 3.33
+  } units box
 
 create_box		1 domain
 
@@ -1027,9 +1038,11 @@ fix 				pdd all particledistribution/discrete 78593 18 pts1 1.97883E-06 pts2 0.0
 				pts12 0.120736947 pts13 0.095077524 pts14 0.065101351 pts15 0.037187843 pts16 0.015932988 pts17 0.001336914 pts18 5.1597E-06
 
 
-region 				factory block 0.0 ${width} 0.0 ${length} ${(plate_height+layer_thickness)*1.5} ${(plate_height + layer_thickness)*3.33} units box
+region 				factory block 0.0 ${width} 0.0 ${length} ${
+    (plate_height + layer_thickness) * 1.5
+  } ${(plate_height + layer_thickness) * 3.33} units box
 fix 				ins all insert/rate/region seed 51869 distributiontemplate pdd &
-				nparticles ${nparticles} particlerate 200000 insert_every 5 &
+				nparticles ${nparticles} particlerate ${particlerate} insert_every 5 &
 				overlapcheck yes vel constant 0. 0. 0.0 region factory ntry_mc 10000
 				
 			
@@ -1080,7 +1093,7 @@ function generateBedPlateDict() {
   var length = parseFloat($("#plate_length").val()) / 1000000;
 
   var bedPlateDict = `/*--------------------------------*- C++ -*----------------------------------*
-| =========                |                                                 |
+| =========                |                                                  |
 | \\      /  F ield         | foam-extend: Open Source CFD                    |
 |  \\    /   O peration     | Version:     4.0                                |
 |   \\  /    A nd           | Web:         http://www.foam-extend.org         |
@@ -1265,9 +1278,7 @@ $("#show_liggghts_input_file").on("click", function () {
   $("#info_div_title_1").addClass("info_div_active");
   $("#info_div_title_2").removeClass("info_div_active");
 
-  $("#info_div_input").val(
-    generateLiggghtsInput()
-  );
+  $("#info_div_input").val(generateLiggghtsInput());
 });
 
 $("#show_laser_prop_input_files").on("click", function () {
@@ -1292,9 +1303,7 @@ $("#info_div_title_1").on("click", function () {
   $("#info_div_title_3").removeClass("info_div_active");
 
   if (liggghts_or_laser_prop === "liggghts") {
-    $("#info_div_input").val(
-      generateLiggghtsInput()
-    );
+    $("#info_div_input").val(generateLiggghtsInput());
   } else {
     $("#info_div_input").val(generateLaserPropInputFiles());
   }
@@ -1406,19 +1415,13 @@ document
     const stl_string_domain = exporter.parse(export_mesh_domain);
 
     // Simulate folder and files
-    zip
-      .folder("case_files")
-      .file("LIGGGHTS/liggghts.in", liggghts_input);
-    zip
-      .folder("case_files")
-      .file("LIGGGHTS/mesh/plate.stl", stl_string_box);
+    zip.folder("case_files").file("LIGGGHTS/liggghts.in", liggghts_input);
+    zip.folder("case_files").file("LIGGGHTS/mesh/plate.stl", stl_string_box);
     zip
       .folder("case_files")
       .file("LIGGGHTS/mesh/domain.stl", stl_string_domain);
 
-    zip
-      .folder("case_files")
-      .file("OpenFOAM/system/bedPlateDict", bedPlateDict);
+    zip.folder("case_files").file("OpenFOAM/system/bedPlateDict", bedPlateDict);
     zip
       .folder("case_files")
       .file("OpenFOAM/constant/LaserProperties", generateLaserPropInputFiles());
