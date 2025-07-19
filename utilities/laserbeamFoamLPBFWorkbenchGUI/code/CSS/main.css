@@ -37,7 +37,7 @@
     #loading{
       position: absolute;
       top: 50%;
-      left: 46%;
+      left: 45%;
       font-size: 25px;
       color: #686868;
     }
@@ -617,12 +617,12 @@ background-color: #5c5c5c;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-top: 20px;
+      margin-top: 45px;
       height: 40px;
       line-height: 40px;
       font-size: 18px;
       /* border: 1px solid #959595; */
-      margin-bottom: 20px;
+      margin-bottom: 45px;
     }
 
 

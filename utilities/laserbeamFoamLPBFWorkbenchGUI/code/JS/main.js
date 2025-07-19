@@ -25,7 +25,6 @@ axesHelper.position.set(-0.5, 0.5, 1);
 
 var shift = [-0.1, -0.2, -0.2]; // Shift to align with the axes helper position
 
-
 const canvas = document.createElement("canvas");
 canvas.width = 128;
 canvas.height = 64;
@@ -114,7 +113,6 @@ var domain_height = parseFloat($("#domain_height").val()) || 1;
 var domain_height_input = $("#domain_height");
 var laser_pos_x_input = $("#laser_pos_x");
 var laser_pos_x_input_end = $("#laser_pos_x_end");
-
 var laser_pos_z_input = $("#laser_pos_z");
 var laser_pos_z_input_end = $("#laser_pos_z_end");
 
@@ -129,7 +127,7 @@ const geometry = new THREE.BoxGeometry(width, height, length);
 // 5. Create edges geometry and material
 var edges = new THREE.EdgesGeometry(geometry);
 var edgeMaterial = new THREE.LineBasicMaterial({
-  color: 0x00ff00,
+  color: 0x000ff, // Blue color for edges
   linewidth: 2,
 });
 var plateEdgeLines = new THREE.LineSegments(edges, edgeMaterial);
@@ -171,7 +169,7 @@ const domain_geometry = new THREE.BoxGeometry(width, height_domain, length);
 // 5. Create edges geometry and material
 const domain_edges = new THREE.EdgesGeometry(domain_geometry);
 const domain_edge_material = new THREE.LineBasicMaterial({
-  color: 0x3366ff,
+  color: 0xbbffbb,
   linewidth: 2,
 });
 
@@ -197,13 +195,13 @@ var cylinderGeometry = new THREE.CylinderGeometry(
 );
 // Create a cylinder Material
 const cylinderMaterial = new THREE.MeshStandardMaterial({
-  color: 0x55ff55,
+  color: 0x22ff22,
   opacity: 0.8,
   transparent: true,
 });
 
 const cylinderMaterial_end = new THREE.MeshStandardMaterial({
-  color: 0xff2222,
+  color: 0x999999,
   opacity: 0.5,
   transparent: true,
 });
