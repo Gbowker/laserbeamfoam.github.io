@@ -1133,16 +1133,32 @@ $("#close_div").on("click", function () {
 });
 
 $("#light_theme").on("click", function () {
+
   $("#light_theme").addClass("active_theme");
   $("#dark_theme").removeClass("active_theme");
+  
+  $("#disclamer_and_license").css("color", "#000000ff");
+  $("#disclamer_and_license").css("transition", "color 0.4s");
+
+  $(".section_title").css("color", "#ffffffff");
+  $(".section_title").css("transition", "color 0.4s");
+
   $("body").css("background", "#d8d8d8");
   $("body").css("transition", "background 0.4s");
+
   scene.background = new THREE.Color("rgb(255, 255, 255)");
 });
 
 $("#dark_theme").on("click", function () {
   $("#light_theme").removeClass("active_theme");
   $("#dark_theme").addClass("active_theme");
+
+    $(".section_title").css("color", "#000000");
+    $(".section_title").css("transition", "color 0.4s");
+  
+  $("#disclamer_and_license").css("color", "rgb(221, 221, 221)");
+  $("#disclamer_and_license").css("transition", "color 0.4s");
+
   $("body").css("background", "#4b4b4b");
   $("body").css("transition", "background 0.4s");
   scene.background = new THREE.Color("rgb(42, 42, 42)");
