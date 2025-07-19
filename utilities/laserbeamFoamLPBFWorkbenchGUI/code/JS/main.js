@@ -25,6 +25,12 @@ axesHelper.position.set(-0.5, 0.5, 1);
 
 var shift = [-0.1, -0.2, -0.2]; // Shift to align with the axes helper position
 
+
+const canvas = document.createElement("canvas");
+canvas.width = 128;
+canvas.height = 64;
+const ctx = canvas.getContext("2d");
+
 const xLabel = createAxisLabel(
   "X",
   "#ff0000",
@@ -259,6 +265,8 @@ $(document).ready(function () {
 
   // Load and display the STL file in the same canvas
   loader.load("geometry/single_track_melted.stl", function (geometry) {
+
+    $("#loading").hide(); // Hide the loading message once STL is loaded
     // Create a material for the mesh
     const material = new THREE.MeshStandardMaterial({
       color: 0xffffff,
@@ -497,10 +505,7 @@ function scaleMicromToPx(x) {
 
 // Add axis labels (X, Y, Z)
 function createAxisLabel(text, color, position) {
-  const canvas = document.createElement("canvas");
-  canvas.width = 128;
-  canvas.height = 64;
-  const ctx = canvas.getContext("2d");
+  // const canvas = document.createElement("canvas");
   ctx.font = "30px monospace";
   ctx.fillStyle = color;
   ctx.textAlign = "center";

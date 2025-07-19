@@ -27,10 +27,19 @@
     }
 
     #laser_position_window {
+      position: relative;
       height: 830px;
       width: 98%;
       border: 2px solid rgb(220 220 220);
       border-radius: 8px;
+    }
+    
+    #loading{
+      position: absolute;
+      top: 50%;
+      left: 46%;
+      font-size: 25px;
+      color: #686868;
     }
 
     #laser_position_window:hover,
@@ -216,20 +225,19 @@
       border-radius: 0 0 8px 8px ;
       border-width: 0 4px 4px 4px;
       border-style: solid;
-      border-color: #c8c7c7;
+      border-color: #939393;
     }
-
 
     #laser_properties_input_container_title,#liggghts_input_container_title{
       padding: 12px 20px 20px 20px;
-      background-color: #c8c7c7;
+      background-color: #939393;
       width: 458px;
       height: 6px;
       margin: 1px auto 0 16px;
       border-radius: 8px 8px 0 0;
       border-width: 4px 4px 0 4px;
       border-style: solid;
-      border-color: #c8c7c7;
+      border-color: #939393;
     }
 
     #laser_properties_input_container {
@@ -391,7 +399,7 @@ background-color: #5c5c5c;
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;
+      height: 1830px;
       background-color: rgba(0, 0, 0, 0.5);
       display: flex;
       justify-content: center;
