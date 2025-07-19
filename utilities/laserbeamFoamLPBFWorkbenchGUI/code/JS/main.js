@@ -1177,6 +1177,31 @@ $("#copy_div").on("click", function () {
     });
 });
 
+$("#reset_all_button").on("click", function () {
+  // Reset all input fields to their default values
+  $("#plate_width").val(200);
+  $("#plate_height").val(100);
+  $("#plate_length").val(800);
+  $("#layer_thickness").val(50);
+
+  $("#domain_height").val(200);
+  $("#laser_rad").val(25);
+  $("#laser_pos_x").val(100);
+  $("#laser_pos_z").val(100);
+  $("#laser_pos_x_end").val(100);
+  $("#laser_pos_z_end").val(700);
+  $("#laser_angle_yx").val(0);
+  $("#laser_angle_yz").val(0);
+  $("#laser_power").val(150);
+  $("#scanning_speed").val(1);
+
+  // Update the display
+  updateDisplay();
+
+});
+
+
+
 function generateLaserPropInputFiles() {
   var radius = $("#laser_rad").val();
 
