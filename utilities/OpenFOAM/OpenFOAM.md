@@ -5,21 +5,7 @@ nav_order: 1
 parent: Utilities
 ---
 
-# setSolidFraction
+# OpenFOAM utilities
 
-<br>
-
-<img align="left" class="utility_image"  width="350"  src="images/particles.gif"> 
-<img align="right"  width="330"  src="images/banner1.png"> <br> 
-<img align="left"   src="images/banner2.png" > <br>
-
-<div style="margin-top:200px"></div>
-
-<br>
-<br>
-<br>
-<br>
-
-## Description
-
+On this page you can find a list of OpenFOAM utilities that are used in the Laser Melting Suite. These utilities are designed to help with various tasks related to the simulation of laser melting processes. 
 
