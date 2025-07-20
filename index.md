@@ -12,18 +12,15 @@ nav_order: 1
 [![Build and test](https://github.com/laserbeamfoam/LaserbeamFoam/actions/workflows/build.yml/badge.svg?branch=development)](https://github.com/laserbeamfoam/LaserbeamFoam/actions/workflows/build.yml){:target="_blank"}
 [![Pull Requests](https://img.shields.io/github/issues-pr-raw/laserbeamfoam/LaserbeamFoam?label=Pull%20Requests)](https://github.com/laserbeamfoam/LaserbeamFoam/pulls){:target="_blank"}
 [![Issues](https://img.shields.io/github/issues/laserbeamfoam/LaserbeamFoam?label=Issues)](https://github.com/laserbeamfoam/LaserbeamFoam/issues){:target="_blank"}
-[![DOI](https://joss.theoj.org/papers/10.21105/joss.07407/status.svg)](https://doi.org/10.21105/joss.07407){:target="_blank"}<!--TODO needs to be changed--> 
+<!-- [![DOI](https://joss.theoj.org/papers/10.21105/joss.07407/status.svg)](https://doi.org/10.21105/joss.07407){:target="_blank"} -->
 
 ---
 
 # Welcome
 
-<p align="justify">
 Welcome to the landing page of the <strong>Laser Melting Suite</strong>. This is a collection of solvers for OpenFOAM, which are used to solve various problems in computational fluid dynamics (CFD) and other fields. The solvers are designed to be easy to use and flexible, allowing users to customize them for their specific needs.
-</p>
 
 # What is the Laser Melting Suite?
-
 
 The <strong>Laser Melting Suite</strong> is a collection of <strong>OpenFOAM</strong> solvers and utilities designed for simulating laser melting processes in Laser Powder Bed Fusion, selective laser melting, laser welding and many other. The suite includes solvers for both 2D and 3D simulations. The solvers are designed to be easy to use and flexible, allowing users to customize them for their specific needs.
 
