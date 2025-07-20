@@ -5,7 +5,7 @@ nav_order: 1
 parent: Utilities
 ---
 
-<b>LPBF Workbench</b>
+<b style="font-size:22px">LPBF Workbench</b>
 
 <img src="workbench.png" alt="alt text" style="width:100%;">
 
