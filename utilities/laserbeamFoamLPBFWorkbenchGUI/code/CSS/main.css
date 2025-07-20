@@ -331,15 +331,15 @@
     #download_liggghts_input_button,
     #download_all_case_files_button,
     #download_laser_prop_input_button, #reset_all_button{
-    color: #000000;
-    background: #d2d2d2;
-    border: 2px solid #1c1c1c;
-    margin-left: 6px;
+      color: #000000;
+      background: #d2d2d2;
+      border: 2px solid #1c1c1c;
+      margin-left: 6px;
     }
 
     #reset_all_button {
-background-color: #5c5c5c;
-    color: #ffffff;
+      background-color: #5c5c5c;
+      color: #ffffff;
     }
 
     #download_liggghts_input_button:not([disabled]):hover,
@@ -625,16 +625,13 @@ background-color: #5c5c5c;
       margin-bottom: 45px;
     }
 
-
     #disclamer_and_license p {
       font-weight: 700;
       font-size: 20px;
       text-align:center;
-
     }
 
     #disclamer_and_license a {
       color: #2e85c7;
       text-decoration: none;
     }
-
