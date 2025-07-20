@@ -13,7 +13,7 @@ parent: Utilities
 
 <a href="app.html" class="custom-btn" target="_blank">Open LPBF Workbench App</a>
 
-<strong>LPBF Workbench</strong> is a web-based application meant to serve as a tool for automating parts of the L-PBF simulation workflow. It can be used to generate input files along with .stl files needed for the LIGGGHTS discrete element method software, along with some input files related to laser position and properties required for running OpenFOAM simulations. 
+<strong>LPBF Workbench</strong> is a web-based application meant to serve as a tool for automating parts of the L-PBF simulation workflow. It can be used to generate input files along with .stl files needed for the LIGGGHTS discrete element method software. It can also be used to generate input files related to laser position and properties required for running OpenFOAM simulations. 
 
 <!-- 
 ## 🔹 Powder Deposition Using DEM
