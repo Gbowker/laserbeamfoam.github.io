@@ -1,8 +1,8 @@
 ---
 title: setSolidFraction
 layout: default
-nav_order: 2
-parent: Utilities
+nav_order: 1
+parent: OpenFOAM utilities
 ---
 
 # setSolidFraction
