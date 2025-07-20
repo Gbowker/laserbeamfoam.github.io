@@ -25,7 +25,6 @@ nav_order: 4
 
 <br>
 
-
 1. [A numerical study of processing parameters and their effect on the melt-track profile in Laser Powder Bed Fusion processes](https://www.sciencedirect.com/science/article/pii/S2214860423000957){:target="_blank"} <br>
 Parivendhan, G., Cardiff, P., Flint, T., Tuković, Ž., Obeidi, M., Brabazon, D., Ivanković, A. <br>
 (2023) Additive Manufacturing, 67, 10.1016/j.addma.2023.103482.<br>

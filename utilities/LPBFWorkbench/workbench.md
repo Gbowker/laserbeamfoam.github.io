@@ -5,7 +5,7 @@ nav_order: 1
 parent: Utilities
 ---
 
-# LPBF Workbench
+<b>LPBF Workbench</b>
 
 <img src="workbench.png" alt="alt text" style="width:100%;">
 
@@ -13,7 +13,7 @@ parent: Utilities
 
 <a href="app.html" class="custom-btn" target="_blank">Open LPBF Workbench App</a>
 
-LPBF Workbench App is a web-based application designed to facilitate the simulation of Laser Powder Bed Fusion (LPBF) processes. It provides a user-friendly interface for setting up and running the Discrete Element Method (DEM) simulations of powder deposition, as well as the subsequent LPBF simulations using the `laserBeamFoam` solver in OpenFOAM.
+LPBF Workbench App is a web-based application meant to serve as a tool for automating parts of the L-PBF simulation workflow. It can be used to generate input files along with .stl files needed for the LIGGGHTS discrete element method software, along with some input files related to laser position and properties required for running OpenFOAM simulations. 
 
 <!-- 
 ## 🔹 Powder Deposition Using DEM

@@ -18,7 +18,7 @@ nav_order: 7
 
 ---
 <img align="left" width="170" style="padding-right:30px;" src="images/UoM.png"/>
-## University of Manchester
+## The University of Manchester
 
 <img align="left"  width="22" style="padding-right:6px;padding-top:4px" src="svgs/adress.svg">  Oxford Rd, Manchester M13 9PL, UK<br> 
 <img align="left"  width="22" style="padding-right:6px;padding-top:4px" src="svgs/website.svg"> [https://www.manchester.ac.uk](https://www.manchester.ac.uk){:target="_blank"} <br> 
@@ -40,7 +40,6 @@ nav_order: 7
 
 ---
 <br>
-
 
 # Disclaimer
 
