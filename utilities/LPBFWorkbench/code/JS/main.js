@@ -567,6 +567,7 @@ function createThickAxis(length = 5, radius = 0.05) {
 }
 
 function updateDisplay() {
+  
   var width = scaleMicromToPx($("#plate_width").val());
   var length = scaleMicromToPx($("#plate_length").val());
   var height = scaleMicromToPx($("#plate_height").val());
@@ -1409,40 +1410,35 @@ document
     const zip = new JSZip();
 
     var liggghts_input = generateLiggghtsInput();
-
     var bedPlateDict = generateBedPlateDict();
+
+    var width_mm = parseFloat($("#plate_width").val()) / 1000;
+    var height_mm = parseFloat($("#plate_height").val()) / 1000;
+    var length_mm = parseFloat($("#plate_length").val()) / 1000;
+    var layer_thickness_mm = parseFloat($("#layer_thickness").val()) / 1000;
 
     // Create a mesh from the box geometry (not the edges)
     // Plate geometry
     const export_geometry_box = new THREE.BoxGeometry(
-      parseFloat($("#plate_width").val()),
-      parseFloat($("#plate_length").val()),
-      parseFloat($("#plate_height").val())
+      width_mm,
+      length_mm,
+      height_mm
     );
 
     // Move so that the minimum corner is at (0,0,0)
-    export_geometry_box.translate(
-      parseFloat($("#plate_width").val()) / 2,
-      parseFloat($("#plate_length").val()) / 2,
-      parseFloat($("#plate_height").val()) / 2
-    );
+    export_geometry_box.translate(width_mm / 2, length_mm / 2, height_mm / 2);
 
     // Domain geometry
     const export_geometry_domain = new THREE.BoxGeometry(
-      parseFloat($("#plate_width").val()),
-      parseFloat($("#plate_length").val()),
-      (parseFloat($("#plate_height").val()) +
-        parseFloat($("#layer_thickness").val())) *
-        3.33
+      width_mm,
+      length_mm,
+      (height_mm + layer_thickness_mm) * 3.33
     );
     // Move so that the minimum corner is at (0,0,0)
     export_geometry_domain.translate(
-      parseFloat($("#plate_width").val()) / 2,
-      parseFloat($("#plate_length").val()) / 2,
-      ((parseFloat($("#plate_height").val()) +
-        parseFloat($("#layer_thickness").val())) *
-        3.33) /
-        2
+      width_mm / 2,
+      length_mm / 2,
+      ((height_mm + layer_thickness_mm) * 3.33) / 2
     );
 
     const export_mesh_box = new THREE.Mesh(
@@ -1457,6 +1453,16 @@ document
     const exporter = new STLExporter();
     const stl_string_box = exporter.parse(export_mesh_box);
     const stl_string_domain = exporter.parse(export_mesh_domain);
+
+    // Simulate folder and files
+    // zip.folder("DEM_liggghts_case").file("mesh/plate.stl", stl_string_box);
+    // zip.folder("DEM_liggghts_case").file("mesh/domain.stl", stl_string_domain);
+    // zip.folder("DEM_liggghts_case").file("input.liggghts", liggghts_input);
+    // zip
+      // .folder("DEM_liggghts_case")
+      // .file("OpenFOAM/system/bedPlateDict", bedPlateDict);
+    // Create zip file
+    // const blob = await zip.generateAsync({ type: "blob" });
 
     // Simulate folder and files
     zip.folder("case_files").file("LIGGGHTS/liggghts.in", liggghts_input);
