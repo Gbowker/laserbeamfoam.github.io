@@ -39,6 +39,7 @@ const xLabel = createAxisLabel(
     0 + shift[2]
   ).add(axesHelper.position)
 );
+
 const yLabel = createAxisLabel(
   "Y",
   "#00ff00",
@@ -46,6 +47,7 @@ const yLabel = createAxisLabel(
     axesHelper.position
   )
 );
+
 const zLabel = createAxisLabel(
   "Z",
   "#0000ff",
@@ -55,6 +57,7 @@ const zLabel = createAxisLabel(
     -axisLength - 0.2 + shift[2]
   ).add(axesHelper.position)
 );
+
 scene.add(xLabel);
 scene.add(yLabel);
 scene.add(zLabel);
@@ -503,8 +506,10 @@ function scaleMicromToPx(x) {
 
 // Add axis labels (X, Y, Z)
 function createAxisLabel(text, color, position) {
-  // const canvas = document.createElement("canvas");
-  ctx.font = "30px monospace";
+  
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  ctx.font = "60px monospace";
   ctx.fillStyle = color;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
@@ -516,9 +521,11 @@ function createAxisLabel(text, color, position) {
     map: texture,
     transparent: true,
   });
+
   const sprite = new THREE.Sprite(material);
   sprite.scale.set(0.4, 0.2, 1);
   sprite.position.copy(position);
+  
   return sprite;
 }
 
