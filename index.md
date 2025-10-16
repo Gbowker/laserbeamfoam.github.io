@@ -18,7 +18,8 @@ nav_order: 1
 
 # Welcome
 
-Welcome to the landing page of the <strong>Laser Melting Suite</strong>. This is a collection of solvers for OpenFOAM, which are used to solve various problems in computational fluid dynamics (CFD) and other fields. The solvers are designed to be easy to use and flexible, allowing users to customize them for their specific needs.
+Welcome to laserbeamFoam, an open-source collection of OpenFOAM solvers and utilities for modelling laser-based manufacturing and melting processes.
+These solvers are used in research and industry for applications such as Laser Powder Bed Fusion, selective laser melting, and laser welding.
 
 # What is the Laser Melting Suite?
 
