@@ -9,13 +9,17 @@ nav_order: 4
 
 <br>
 
+1. [Version 3.0 — LaserbeamFoam: Laser ray-tracing and thermally induced state transition simulation toolkit](https://www.sciencedirect.com/science/article/pii/S2352711023003084){:target="_blank"}<br>
+  Tom Flint, Petar Cosic, Gowthaman Parivendhan, Simon Rodriguez, Ivan Bunaziv, Patrick O'Toole, Philip Cardiff <br>
+  SoftwareX, Volume 21, February 2023<br>
+  [In-Press]{:target="_blank"}
 
-1. [Version 2.0 — LaserbeamFoam: Laser ray-tracing and thermally induced state transition simulation toolkit](https://www.sciencedirect.com/science/article/pii/S2352711023003084){:target="_blank"}<br>
-  Thomas F. Flint, Joseph D. Robson, Gowthaman Parivendhan, Philip Cardiff <br>
+2. [Version 2.0 — LaserbeamFoam: Laser ray-tracing and thermally induced state transition simulation toolkit](https://www.sciencedirect.com/science/article/pii/S2352711023003084){:target="_blank"}<br>
+  Thomas F. Flint, Joseph D. Robson, Parsa Esmati, Nicolo Grilli, Gowthaman Parivendhan, Philip Cardiff <br>
   SoftwareX, Volume 21, February 2023<br>
   [https://doi.org/10.1016/j.softx.2023.101612](https://doi.org/10.1016/j.softx.2023.101612){:target="_blank"}
 
-2. [laserbeamFoam: Laser ray-tracing and thermally induced state transition simulation toolkit](https://www.sciencedirect.com/science/article/pii/S2352711022002175){:target="_blank"}<br>
+3. [laserbeamFoam: Laser ray-tracing and thermally induced state transition simulation toolkit](https://www.sciencedirect.com/science/article/pii/S2352711022002175){:target="_blank"}<br>
   TF Flint, JD Robson, G Parivendhan, P Cardiff <br>
   SoftwareX, 2023 <br>
   [https://doi.org/10.1016/j.softx.2022.101299](https://doi.org/10.1016/j.softx.2022.101299){:target="_blank"}
