@@ -5,7 +5,7 @@ nav_order: 2
 parent: laserbeamFoam
 ---
 
-![alt text](solver.jpg)
+![Laser Simulation](solver.jpg)
 
 ## Standard Operating Procedure
 This standard operating procedure gives step-by-step instructions on how to download, install, and run basic laserbeamFoam simulations on your laptop.
