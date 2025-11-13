@@ -6,6 +6,8 @@ parent: laserbeamFoam
 ---
 
 ![alt text](solver.png)
+<img align="left"  src="solver.png" > <br>
+
 
 ## Standard Operating Procedure
 This standard operating procedure gives step-by-step instructions on how to download, install, and run basic laserbeamFoam simulations on your laptop.
