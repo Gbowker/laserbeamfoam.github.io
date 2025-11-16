@@ -1,5 +1,5 @@
 ---
-title: How to install
+title: How to Install
 layout: page
 nav_order: 2
 parent: laserbeamFoam
