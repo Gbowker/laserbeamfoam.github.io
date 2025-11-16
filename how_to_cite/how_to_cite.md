@@ -7,7 +7,7 @@ nav_order: 5
 
 # How to cite
 
-If you use one of these solvers for a publication, please cite the appropirate reference (see [Publications](../publications/publications.html) page)
+If you use one of these solvers for a publication, please cite the appropriate reference (see [Publications](../publications/publications.html) page)
 in the following way:
 
 Example (laserbeamFoam):
