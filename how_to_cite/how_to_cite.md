@@ -1,5 +1,5 @@
 ---
-title: How to cite
+title: How to Cite
 layout: default
 nav_order: 5
 ---
