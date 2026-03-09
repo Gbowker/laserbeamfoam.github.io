@@ -10,27 +10,27 @@ nav_order: 5
 If you use one of these solvers for a publication, please cite the appropriate reference (see [Publications](../publications/publications.html) page)
 in the following way:
 
-Example (laserbeamFoam):
+Example (laserbeamFoam v3):
 
-> Version 2.0 — LaserbeamFoam: Laser ray-tracing and thermally induced state transition simulation toolkit
-> Thomas F. Flint, Joseph D. Robson, Gowthaman Parivendhan, Philip Cardiff
-> SoftwareX, Volume 21, February 2024
->  https://doi.org/10.1016/j.softx.2023.101612 
+> Version 3.0 — LaserbeamFoam: Laser ray-tracing and thermally induced state transition simulation toolkit
+> Tom Flint, Petar Ćosić, Gowthaman Parivendhan, Simon A. Rodriguez, Ivan Bunaziv, Patrick O’Toole, Philip Cardiff
+> SoftwareX, Volume 32, December 2025
+> https://doi.org/10.1016/j.softx.2025.102419
 
 
 The corresponding BibTeX entry:
 
 ```bibtex
-@article{Flint2024, 
-    author =     {Thomas F. Flint, Joseph D. Robson, Gowthaman Parivendhan, Philip Cardiff},
-    title =      {Version 2.0 — LaserbeamFoam: Laser ray-tracing and thermally induced state transition simulation toolkit},
+@article{Flint2025, 
+    author =     {Tom Flint, Petar Ćosić, Gowthaman Parivendhan, Simon A. Rodriguez, Ivan Bunaziv, Patrick O’Toole, Philip Cardiff},
+    title =      {Version 3.0 — LaserbeamFoam: Laser ray-tracing and thermally induced state transition simulation toolkit},
     journal =    {SoftwareX},
-    year =       {2024}, 
+    year =       {2025}, 
     publisher =  {Elsevier},
-    volume =     {25}, 
-    pages =      {101612},
-    doi =        {10.1016/j.softx.2023.101612}, 
-    url =        {https://doi.org/10.1016/j.softx.2023.101612}
+    volume =     {32}, 
+    pages =      {102419},
+    doi =        {10.1016/j.softx.2025.102419}, 
+    url =        {https://doi.org/10.1016/j.softx.2025.102419}
 }
 ```
 
