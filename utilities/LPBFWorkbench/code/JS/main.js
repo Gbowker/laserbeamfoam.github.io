@@ -315,8 +315,10 @@ $("#laser_angle_yx").on("input", function () {
   var x_end = scaleMicromToPx($("#laser_pos_x_end").val());
   var z_end = scaleMicromToPx($("#laser_pos_z_end").val());
 
-  var cylinder_rot_yx = ($("#laser_angle_yx").val() * Math.PI) / 180;
-  var cylinder_rot_yz = ($("#laser_angle_yz").val() * Math.PI) / 180;
+//   var cylinder_rot_yx = ($("#laser_angle_yx").val() * Math.PI) / 180;
+  var cylinder_rot_yx = 0;
+//   var cylinder_rot_yz = ($("#laser_angle_yz").val() * Math.PI) / 180;
+  var cylinder_rot_yz =0;
 
   var radius = scaleMicromToPx($("#laser_rad").val());
 
@@ -365,8 +367,10 @@ $("#laser_angle_yz").on("input", function () {
   var z = scaleMicromToPx($("#laser_pos_z").val());
   var x_end = scaleMicromToPx($("#laser_pos_x_end").val());
   var z_end = scaleMicromToPx($("#laser_pos_z_end").val());
-  var cylinder_rot_yx = ($("#laser_angle_yx").val() * Math.PI) / 180;
-  var cylinder_rot_yz = ($("#laser_angle_yz").val() * Math.PI) / 180;
+//   var cylinder_rot_yx = ($("#laser_angle_yx").val() * Math.PI) / 180;
+//   var cylinder_rot_yz = ($("#laser_angle_yz").val() * Math.PI) / 180;
+  var cylinder_rot_yx = 0;
+  var cylinder_rot_yz = 0;
   var radius = scaleMicromToPx($("#laser_rad").val());
 
   cylinderGeometry = new THREE.CylinderGeometry(
@@ -416,8 +420,10 @@ $("#laser_rad").on("input", function () {
   var domain_height = scaleMicromToPx($("#domain_height").val());
   var x = scaleMicromToPx($("#laser_pos_x").val());
   var z = scaleMicromToPx($("#laser_pos_z").val());
-  var cylinder_rot_yx = ($("#laser_angle_yx").val() * Math.PI) / 180;
-  var cylinder_rot_yz = ($("#laser_angle_yz").val() * Math.PI) / 180;
+//   var cylinder_rot_yx = ($("#laser_angle_yx").val() * Math.PI) / 180;
+//   var cylinder_rot_yz = ($("#laser_angle_yz").val() * Math.PI) / 180;
+  var cylinder_rot_yx = 0;
+  var cylinder_rot_yz = 0;
   var radius = scaleMicromToPx($("#laser_rad").val());
 
   cylinderGeometry = new THREE.CylinderGeometry(
@@ -588,13 +594,14 @@ function updateDisplay() {
   var x_end = scaleMicromToPx($("#laser_pos_x_end").val());
   var z_end = scaleMicromToPx($("#laser_pos_z_end").val());
 
-  var cylinder_rot_yx = ($("#laser_angle_yx").val() * Math.PI) / 180;
-  var cylinder_rot_yz = ($("#laser_angle_yz").val() * Math.PI) / 180;
+//   var cylinder_rot_yx = ($("#laser_angle_yx").val() * Math.PI) / 180;
+//   var cylinder_rot_yz = ($("#laser_angle_yz").val() * Math.PI) / 180;
+  var cylinder_rot_yx = 0;
+  var cylinder_rot_yz = 0;
   //  ----------------------------------------------------------------------------
 
   // Remove old plateEdgeLines from scene
   scene.remove(plateEdgeLines);
-
   // Create new geometry with updated width
   const newGeometry = new THREE.BoxGeometry(width, height, length);
   newGeometry.translate(width / 2, height / 2, -length / 2);
@@ -1528,10 +1535,14 @@ $("#run_button").on("click", function () {
   var z = z_start;
   var counter = 0;
 
-  var cylinder_rot_yx =
-    parseFloat($("#laser_angle_yx").val()) * (Math.PI / 180);
-  var cylinder_rot_yz =
-    parseFloat($("#laser_angle_yz").val()) * (Math.PI / 180);
+//   var cylinder_rot_yx =
+//     parseFloat($("#laser_angle_yx").val()) * (Math.PI / 180);
+//   var cylinder_rot_yz =
+//     parseFloat($("#laser_angle_yz").val()) * (Math.PI / 180);
+
+      var cylinder_rot_yx = 0;
+  var cylinder_rot_yz = 0;
+   
 
   var domain_height = (parseFloat($("#domain_height").val()) * 3.2) / 800;
 
@@ -1580,10 +1591,13 @@ $("#reset_button").on("click", function () {
   var x_start = parseFloat($("#laser_pos_x").val());
   var z_start = parseFloat($("#laser_pos_z").val());
   var domain_height = (parseFloat($("#domain_height").val()) * 3.2) / 800;
-  var cylinder_rot_yx =
-    parseFloat($("#laser_angle_yx").val()) * (Math.PI / 180);
-  var cylinder_rot_yz =
-    parseFloat($("#laser_angle_yz").val()) * (Math.PI / 180);
+//   var cylinder_rot_yx =
+//     parseFloat($("#laser_angle_yx").val()) * (Math.PI / 180);
+//   var cylinder_rot_yz =
+//     parseFloat($("#laser_angle_yz").val()) * (Math.PI / 180);
+
+  var cylinder_rot_yx = 0;
+  var cylinder_rot_yz = 0;
 
   cylinder.position.set(
     scaleMicromToPx(x_start) + (domain_height * Math.sin(cylinder_rot_yx)) / 2,
