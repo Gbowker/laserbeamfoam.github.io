@@ -1171,7 +1171,7 @@ $("#dark_theme").on("click", function () {
   $("#light_theme").removeClass("active_theme");
   $("#dark_theme").addClass("active_theme");
 
-    $(".section_title").css("color", "#000000");
+    $(".section_title").css("color", "#f9f9f9");
     $(".section_title").css("transition", "color 0.4s");
   
   $("#disclamer_and_license").css("color", "rgb(221, 221, 221)");
