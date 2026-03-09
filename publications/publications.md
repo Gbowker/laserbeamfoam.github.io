@@ -4,41 +4,38 @@ layout: default
 nav_order: 4
 ---
 
+# Publications
 
 ## laserbeamFoam relevant publications
 
 <br>
 
-1. [Version 3.0 — LaserbeamFoam: Laser ray-tracing and thermally induced state transition simulation toolkit](https://www.sciencedirect.com/science/article/pii/S2352711023003084){:target="_blank"}<br>
+1. [Version 3.0 — LaserbeamFoam: Laser ray-tracing and thermally induced state transition simulation toolkit](https://www.sciencedirect.com/science/article/pii/S2352711025003851){:target="_blank"}<br>
   Tom Flint, Petar Cosic, Gowthaman Parivendhan, Simon Rodriguez, Ivan Bunaziv, Patrick O'Toole, Philip Cardiff <br>
-  SoftwareX, Volume 21, February 2023<br>
-  [In-Press]{:target="_blank"}
+  SoftwareX, Volume 32, December 2025<br>
+  [https://doi.org/10.1016/j.softx.2025.102419](https://doi.org/10.1016/j.softx.2025.102419){:target="_blank"}
 
 2. [Version 2.0 — LaserbeamFoam: Laser ray-tracing and thermally induced state transition simulation toolkit](https://www.sciencedirect.com/science/article/pii/S2352711023003084){:target="_blank"}<br>
   Thomas F. Flint, Joseph D. Robson, Parsa Esmati, Nicolo Grilli, Gowthaman Parivendhan, Philip Cardiff <br>
-  SoftwareX, Volume 21, February 2023<br>
+  SoftwareX, Volume 25, February 2024<br>
   [https://doi.org/10.1016/j.softx.2023.101612](https://doi.org/10.1016/j.softx.2023.101612){:target="_blank"}
 
 3. [laserbeamFoam: Laser ray-tracing and thermally induced state transition simulation toolkit](https://www.sciencedirect.com/science/article/pii/S2352711022002175){:target="_blank"}<br>
   TF Flint, JD Robson, G Parivendhan, P Cardiff <br>
-  SoftwareX, 2023 <br>
+  SoftwareX, Volume 21, February 2023<br>
   [https://doi.org/10.1016/j.softx.2022.101299](https://doi.org/10.1016/j.softx.2022.101299){:target="_blank"}
 
 
-## laserMeltFoam relevant publications
+## Associated publications
 
 <br>
 
 1. [A numerical study of processing parameters and their effect on the melt-track profile in Laser Powder Bed Fusion processes](https://www.sciencedirect.com/science/article/pii/S2214860423000957){:target="_blank"} <br>
 Parivendhan, G., Cardiff, P., Flint, T., Tuković, Ž., Obeidi, M., Brabazon, D., Ivanković, A. <br>
-(2023) Additive Manufacturing, 67, 10.1016/j.addma.2023.103482.<br>
+Additive Manufacturing, Volume 67, April 2023<br>
 [https://doi.org/10.1016/j.addma.2023.103482](https://doi.org/10.1016/j.addma.2023.103482){:target="_blank"}
 
-## beamWeldFoam relevant publications
-
-<br>
-
-1. [beamWeldFoam: Numerical simulation of high energy density fusion and vapourisation-inducing processes.](https://www.sciencedirect.com/science/article/pii/S2352711022000504){:target="_blank"} <br>
+2. [beamWeldFoam: Numerical simulation of high energy density fusion and vapourisation-inducing processes.](https://www.sciencedirect.com/science/article/pii/S2352711022000504){:target="_blank"} <br>
 Flint, T. F., Parivendhan, G., Ivankovic, A., Smith, M. C., & Cardiff, P. <br>
-(2022).  SoftwareX, 18, 101065. <br>
+SoftwareX, Volume 18, June 2022<br>
 [https://doi.org/10.1016/j.softx.2022.101065](https://doi.org/10.1016/j.softx.2022.101065){:target="_blank"}

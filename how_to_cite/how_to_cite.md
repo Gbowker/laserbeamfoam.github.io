@@ -21,7 +21,7 @@ Example (laserbeamFoam):
 The corresponding BibTeX entry:
 
 ```bibtex
-@article{Cardiff2025, 
+@article{Flint2024, 
     author =     {Thomas F. Flint, Joseph D. Robson, Gowthaman Parivendhan, Philip Cardiff},
     title =      {Version 2.0 — LaserbeamFoam: Laser ray-tracing and thermally induced state transition simulation toolkit},
     journal =    {SoftwareX},
