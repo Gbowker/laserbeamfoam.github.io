@@ -28,10 +28,9 @@ The corresponding BibTeX entry:
     year =       {2024}, 
     publisher =  {Elsevier},
     volume =     {25}, 
-    number =     {108}, 
     pages =      {101612},
-    doi =        {10.1016/j.softx.2022.101299}, 
-    url =        {https://doi.org/10.1016/j.softx.2022.101299}
+    doi =        {10.1016/j.softx.2023.101612}, 
+    url =        {https://doi.org/10.1016/j.softx.2023.101612}
 }
 ```
 
