@@ -2,7 +2,7 @@
 title: beamWeldFoam
 layout: page
 nav_order: 1
-parent: Associated Projects
+parent: Associated
 ---
 
 # beamWeldFoam

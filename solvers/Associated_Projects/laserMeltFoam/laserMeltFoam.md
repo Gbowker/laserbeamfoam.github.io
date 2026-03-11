@@ -2,7 +2,7 @@
 title: laserMeltFoam
 layout: page
 nav_order: 1
-parent: Associated Projects
+parent: Associated
 ---
 
 # laserMeltFoam
