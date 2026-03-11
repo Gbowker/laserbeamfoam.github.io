@@ -4,6 +4,7 @@ layout: home
 nav_order: 1
 ---
 
+<!-- <img align="left"  src="main_gif.gif" > <br> -->
 <img align="left"  src="banner_gif.gif" > <br>
 
 <br>
