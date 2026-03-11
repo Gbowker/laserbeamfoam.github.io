@@ -437,3 +437,16 @@ input[type="submit"]:hover {
 img[src="banner_gif.gif"]{
     width: 740px;
 }
+
+.copyright{
+    position: absolute;
+    font-size:14px;
+    bottom: 19px;
+    /* top: 0 !important; */
+    left: 72% !important;
+    z-index: 99 !important;
+    width: 420px;
+    color: #d5d5d5;
+    height: auto;
+    display: block;
+}

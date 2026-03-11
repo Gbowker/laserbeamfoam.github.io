@@ -1,17 +1,27 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    const container = document.getElementById("main-header");
+    const site_nav = document.getElementById("site-nav");
+    const copyright = document.createElement("div");
+    copyright.innerHTML="Copyright (C) 2026 laserbeamFoam"
+    // img2.src = "../images/github.png";
+    // img2.alt = "Example image";
+    copyright.classList.add("copyright");   // add class here
+    site_nav.appendChild(copyright);
+
+
+    const main_header = document.getElementById("main-header");
     const img = document.createElement("img");
     img.src = "../images/github.png";
     img.alt = "Example image";
     img.classList.add("github-img");   // add class here
-    container.appendChild(img);
+    main_header.appendChild(img);
     
     img.addEventListener("click",()=>{
         window.open("https://github.com/laserbeamfoam");
     });
 
     const activeLink = document.querySelector('.nav-list-link.active');
+
     if (activeLink && activeLink.innerHTML.trim() === "Home") {
         
     const utilities = document.getElementById("utilities");
