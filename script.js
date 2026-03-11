@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const site_nav = document.getElementById("site-nav");
     const copyright = document.createElement("div");
-    copyright.innerHTML="Copyright (C) 2026 laserbeamFoam"
+    copyright.innerHTML="Copyright (C) 2025 laserbeamFoam"
     // img2.src = "../images/github.png";
     // img2.alt = "Example image";
     copyright.classList.add("copyright");   // add class here

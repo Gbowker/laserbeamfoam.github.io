@@ -22,7 +22,7 @@ top:-60px
 }
 
 .side-bar{
-  background-color: #343434;
+  background-color: #262626;
   width: 35%;
 //   position: sticky;
   top: 0px;
@@ -440,12 +440,15 @@ img[src="banner_gif.gif"]{
 
 .copyright{
     position: absolute;
-    font-size:14px;
+    font-size: 14px;
     bottom: 19px;
+    // font-weight:bold;
     /* top: 0 !important; */
-    left: 72% !important;
+    /* left: 72% !important; */
+    /* width: 100%; */
+    right: 14px;
     z-index: 99 !important;
-    width: 420px;
+    /* width: 420px; */
     color: #d5d5d5;
     height: auto;
     display: block;
