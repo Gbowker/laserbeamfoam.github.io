@@ -52,7 +52,7 @@ These solvers are used in research and industry for applications such as Laser P
 </div>
 
    
-   <div id="copyright"> <img src="media/LBF_logo.png" id="lpbf_logo" alt="logo">    Copyright (C) 2025 laserbeamFoam </div>
+   <!-- <div id="copyright"> <img src="media/LBF_logo.png" id="lpbf_logo" alt="logo">    Copyright (C) 2025 laserbeamFoam </div> -->
    
 <!-- # What is the Laser Melting Suite?
 
