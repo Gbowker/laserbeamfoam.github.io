@@ -7,8 +7,9 @@ nav_order: 8
 
 # Contact us
 
-If you would like to contact us, you can do so either by contacting a member of the [development team](../team/development_team.html) or by filling out the following form 
+If you would like to contact us, you can do so either by contacting a member of the [development team](../team/development_team.html) or by sending an email to: 
 
+<!-- 
 <section id="contact">
   <div class="container">
     <div class="form-ajax" action="contact-form">
@@ -27,4 +28,4 @@ If you would like to contact us, you can do so either by contacting a member of 
       </div>
     </div>
   </div>
-</section>
+</section> -->

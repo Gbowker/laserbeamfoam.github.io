@@ -1,5 +1,5 @@
 ---
-title: OpenFOAM utilities
+title: OpenFOAM
 layout: default
 nav_order: 1
 parent: Utilities

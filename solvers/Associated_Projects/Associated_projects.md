@@ -1,5 +1,5 @@
 ---
-title: Associated Projects
+title: Associated 
 layout: default
 nav_order: 2
 parent: Solvers

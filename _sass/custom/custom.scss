@@ -3,7 +3,7 @@
 // Print-only styles.
 
 #top{
-    margin-left: 38%;
+    margin-left: 36%;
 top:-60px
     // padding-left: 37px;
 }
@@ -23,7 +23,7 @@ top:-60px
 
 .side-bar{
   background-color: #343434;
-  width: 38%;
+  width: 35%;
 //   position: sticky;
   top: 0px;
 }
@@ -32,6 +32,27 @@ top:-60px
     background: none;
 
 }
+
+.nav-list .nav-list-item .nav-list-link {
+    width: 100% !important;;
+}
+
+.github-img{
+    position:sticky;
+    top: 0!important;
+    left: 75%!important;
+    z-index: 99!important;
+    width: 59px;
+    height:auto;
+    display:block;
+}
+
+.github-img:hover{
+    cursor:pointer;
+    opacity: 0.5;
+}
+
+
 
 .site-footer {
   display: none !important;
@@ -73,7 +94,16 @@ border-radius: 4px 0 0 4px;
 }
 
 .site-nav{
-    width: 300px;
+    width: 280px;
+}
+
+.nav-list-expander{
+color: rgb(0, 89, 222)!important;
+}
+
+.nav-list-expander:hover{
+background:unset!important;
+cursor:pointer;
 }
 
 .nav-list .nav-list-item a {
@@ -127,6 +157,11 @@ color: #000000 !important;
   color: #000000;
 }
 
+
+#copyright-footer{
+    // position: absolute;
+z-index: 1999!important;
+}
 
 .nav-list > .nav-list-item > .nav-list-link::before {
   content: "";

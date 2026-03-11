@@ -52,6 +52,8 @@ These solvers are used in research and industry for applications such as Laser P
 </div>
 
    
+   <div id="copyright"> <img src="media/LBF_logo.png" id="lpbf_logo" alt="logo">    Copyright (C) 2025 laserbeamFoam </div>
+   
 <!-- # What is the Laser Melting Suite?
 
 The <strong>Laser Melting Suite</strong> is a collection of <strong>OpenFOAM</strong> solvers and utilities designed for simulating laser melting processes in Laser Powder Bed Fusion, selective laser melting, laser welding and many others. The suite includes solvers for both 2D and 3D simulations. The solvers are designed to be easy to use and flexible, allowing users to customize them for their specific needs. -->
