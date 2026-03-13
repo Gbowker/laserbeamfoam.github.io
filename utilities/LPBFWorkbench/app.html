@@ -26,48 +26,6 @@
 
     <script src="https://cdn.jsdelivr.net/pyodide/v0.27.0/full/pyodide.js"></script>
 <div id="pyodide_chart" style="width:900px;height:700px;margin:20px auto;"></div>
-<script>
-    async function main() {
-  const pyodide = await loadPyodide();
-  await pyodide.loadPackage("numpy");
-
-  function returnPyCode(start,step,end){
-    return `
-        import numpy as np
-        x = np.linspace(0, 10, 50).tolist()
-        y1 = np.sin(np.linspace(${start}, ${step}, ${end})).tolist()
-        y2 = np.cos(np.linspace(${start}, ${step}, ${end})).tolist()
-    `
-  }
-
-  a = returnPyCode(0,1,60)
-  console.log(a)
-  pyodide.runPython(a);
-
-  function pyGet(name) {
-      const val = pyodide.globals.get(name);
-      return val?.toJs ? val.toJs() : val;
-  }
-
-  const x  = pyGet("x");
-  const y1 = pyGet("y1");
-  const y2 = pyGet("y2");
-  const chart = echarts.init(document.getElementById("pyodide_chart"));
-  chart.setOption({
-      tooltip: { trigger: "axis" },
-      legend: { data: ["sin(x)", "cos(x)"] },
-      xAxis: { type: "category", data: x.map(v => v.toFixed(2)) },
-      yAxis: { type: "value" },
-      series: [
-          { name: "sin(x)", type: "line", data: y1, smooth: true },
-          { name: "cos(x)", type: "line", data: y2, smooth: true }
-      ]
-  });
-
-
-}
-    main();
-</script>
 
     <div id="container">
 
