@@ -1,4 +1,5 @@
 body {
+    /* font-family: Roboto,monospace; */
     font-family: Arial, Helvetica, sans-serif;
     background-color: #b7b7b7;
   }
@@ -17,7 +18,16 @@ body {
   .input_container{
     width: 100%;
     height: 255px;
-    border: 1px solid black;
+    border: 2px solid #e2e2e2;
+    border-radius: 8px;
+  }
+
+  .input_container {
+    transition: border 0.2s linear;
+  }
+
+  .input_container:hover {
+    border: 2px solid #007bc2;
   }
 
   #displays {
@@ -32,7 +42,7 @@ body {
   }
 
   #settings_tab {
-    width: 30.2%;
+    width: 28%;
     height: 850px;
   }
 
@@ -125,30 +135,41 @@ body {
   }
 
   #app_title_text{
-    background: #f1f1f1;
+    /* background: #f1f1f1;
     height: 55px;
     line-height: 55px;
     padding: 0px 721px 0 21px;
     color: #606060;
     margin: 0;
-    border-radius: 5px;
+    border-radius: 12px  0px 0px 0px; */
+
+    background: #ebebeb;
+    height: 55px;
+    line-height: 55px;
+    /* font-weight: 300; */
+    padding: 0px 721px 0 21px;
+    color: #005394;
+    margin: 0;
+    border-radius: 12px 0px 0px 0px;
+
   }
+
   #app_title {
   display: flex;
   height: 60px;
   width: 200px;
   margin: 10px auto 0;
   /* box-sizing: border-box; */
-  padding-left: 10px;
+  /* padding-left: 10px; */
   padding-bottom: 3px;
   line-height: 60px;
-  width: 1366px;
+  width: 1382px;
   font-weight: bold;
   font-size: 30px;
   color: #505050;
   font-family:Arial, Helvetica, sans-serif;
   text-align: right;
-  border-bottom: 2px solid #a5a5a5;
+  border-bottom: 3px solid #4a4a4a;
   }
 
   #cube:hover {
@@ -236,40 +257,54 @@ body {
     width: 50px;
   }
 
+  hr{
+    margin: 0;
+    border-top: 2px solid #007bc2!important;
+  }
+
+  #printer_settings{
+    margin-top: 26px;
+    height: 529px;
+  }
   #laser_properties_input_container,
-  #liggghts_input_container {
-    padding: 12px 20px 20px 20px;
+  #liggghts_input_container ,#liggghts_input_container2{
+    box-sizing: border-box;
+    padding:0 20px 20px 20px;
     /* background-color: #aeaeae24; */
     width: 360px;
     height: 180px;
     margin: 0 auto 5px 11px;
-    border-radius: 8px ;
-    border-width: 1px;
-    border-style: solid;
-    border-color: #ddd8d8;
+    /* border-radius: 0 0 8px 8px ; */
+    /* border-width: 0 1px 1px 1px ; */
+    /* border-style: solid; */
+    /* border-color: #ddd8d8; */
   }
 
   #laser_properties_input_container:hover,
-  #liggghts_input_container:hover {
+  #liggghts_input_container:hover,#liggghts_input_container2:hover,#liggghts_input_container_title:hover{
     border-color: #4488e7;
-
   }
 
   #laser_properties_input_container_title,#liggghts_input_container_title{
     padding: 12px 20px 20px 20px;
+    box-sizing: border-box;
     /* background-color: #ddd8d8; */
-    width: 360px;
+    width: 100%;
     height: 3px;
-    margin: 1px auto 0 11px;
-    border-radius: 8px 8px 0 0;
-    border-width: 1px 1px 0 1px;
-    border-style: solid;
-    border-color: #939393;
-  }
+    /* margin: 1px auto 0 11px; */
+    /* border-radius: 8px 8px 0 0; */
+    /* border-width: 1px 1px 0 1px; */
+    /* border-style: solid; */
+    /* border-color: #ddd8d8; */
+    }
 
   #laser_properties_input_container {
     height: 376px;    
     /* margin-top: 20px; */
+  }
+
+  #liggghts_input_container2{
+    height: 480px;    
   }
 
   #laser_properties_input_container_title{
@@ -404,9 +439,9 @@ body {
     display: block;
     font-weight: bold;
     height: 30px;
-    line-height: 22px;
-    color: #f4f4f4;
-    margin: -4px 0 10px 0;
+    line-height: 30px;
+    color: #535353;
+    margin: -4px 0 0 0;
   }
 
   #alfa {
@@ -451,10 +486,14 @@ body {
   }
 
   .hidden {
+    border:0px solid white!important;
+    padding:0!important;
+    height: 0!important;
+    width:  0!important;
     opacity: 0 !important;
     visibility: hidden !important;
     pointer-events: none !important;
-    transition: opacity 0.4s ease, visibility 0.4s ease;
+    /* transition: opacity 0.4s ease, visibility 0.4s ease; */
   }
 
   .revealed {
@@ -548,7 +587,10 @@ body {
     cursor: pointer;
     scale: 1.1;
   }
-
+.active-tab{
+    background-color: white !important;
+    border-bottom:0px solid white!important;
+}
   .info_div_active {
     background-color: white !important;
   }
@@ -673,43 +715,72 @@ body {
     display: flex;
     width: 100%;
     box-sizing: border-box;
-    height: 30px;
-    border: 1px solid black;
+    height: 36px;
+    /* border: 1px solid black; */
   }
   .tab{
-    width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    line-height: 36px;
+    color: #535353;
+    width: 165px;
     height: 100%;
     border-radius: 5px 5px 0 0;
-    border: 1px solid black;
+    /* border-bottom: 1px solid rgb(113, 113, 113); */
+    border-top:  2px solid rgb(191, 191, 191);
+    border-left: 2px solid rgb(191, 191, 191);
+    /* border-bottom: 1px solid rgb(113, 113, 113); */
     background-color:rgb(201, 201, 201);
     box-sizing: border-box;
+    text-align: center;
   }
 
-#build_plate{
+  .tab:hover{
+    cursor:pointer;
+    /* transform: scale(1.01); */
+    /* transition: background-color 0.2s linear; */
+    background-color: #dadada;
+
+  }
+#build-plate-tab{
     border-radius: 5px 0 0 0;
 }
 
-#results{
-    border-radius: 0 5px 0 0;
+#results-tab,#documentation-tab{
+    border-radius: 0 0 0 0;
 }
+
   #main_window{
-    padding: 20px;
+    padding: 20px 20px 20px 20px;
     box-sizing: border-box;
-    background:#f2f2f2;
-    width: 940px;
+    background: #f6f6f6;
+    width: 967px;
     height: 820px;
-    margin: 20px auto;
+    margin: 25px auto;
     position: absolute;
     right: 38px;
     top: 70px;
-    /* border:1px solid black; */
+    border-radius: 10px;
+    /* border: 3px solid #007bc2; */
   }
-  #pyodide_chart{
+
+  .window{
     padding-top:30px;
     width:897px;
+    width: 100%;
     height: 700px;
     background:#ffffff;
     border-radius: 0 0 20px 20px;
+    /* border-top:    3px solid rgb(191, 191, 191); */
+    border-left:   2px solid rgb(191, 191, 191);
+    border-right:  2px solid rgb(191, 191, 191);
+    border-bottom: 2px solid rgb(191, 191, 191);
+  }
+
+  #pyodide_chart{
+
     /* margin:20px auto; */
   }
 
@@ -730,7 +801,7 @@ body {
     bottom: 10px;
     margin: 0 30px;
     width: 1384px;
-    height: 30px;
-    background: #f1f1f1;
-    border-radius: 5px;
+    height: 21px;
+    background: #ebebeb;
+    border-radius:0 0 8px 8px;
   }
