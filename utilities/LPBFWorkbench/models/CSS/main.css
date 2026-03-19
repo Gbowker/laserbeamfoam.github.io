@@ -134,6 +134,10 @@ body {
     height: 400px;
   }
 
+  #main_window:hover{
+    background:#fbfbfb;
+  }
+
   #app_title_text{
     /* background: #f1f1f1;
     height: 55px;
@@ -143,12 +147,12 @@ body {
     margin: 0;
     border-radius: 12px  0px 0px 0px; */
 
-    background: #ebebeb;
+    background: #f6f6f6;
     height: 55px;
     line-height: 55px;
     /* font-weight: 300; */
     padding: 0px 721px 0 21px;
-    color: #096ab5;
+  color: #007bc2;
     margin: 0;
     border-radius: 12px 0px 0px 0px;
   }
@@ -792,10 +796,10 @@ body {
     color: #646464;
     width: 165px;
     height: 100%;
-    border-radius: 5px 5px 0 0;
+    /* border-radius: 5px 5px 0 0; */
     /* border-bottom: 1px solid rgb(113, 113, 113); */
-    border-top: 2px solid rgb(191, 191, 191);
-    border-left: 2px solid rgb(191, 191, 191);
+    border-top: 1px solid rgb(191, 191, 191);
+    border-left:1px solid rgb(191, 191, 191);
     /* border-bottom: 1px solid rgb(113, 113, 113); */
     background-color: rgb(242 242 242);
     box-sizing: border-box;
@@ -811,18 +815,18 @@ body {
   }
 
 #build-plate-tab{
-    border-radius: 5px 0 0 0;
+    /* border-radius: 5px 0 0 0; */
 }
 
 #results-tab,#documentation-tab{
-    border-radius: 0 0 0 0;
+    /* border-radius: 0 0 0 0; */
     /* border-right: 2px solid rgb(191, 191, 191)!important; */
     /* border-left: 2px solid rgb(191, 191, 191); */
 }
 
 #documentation-tab{
-    border-radius: 0 5px 0 0;
-    /* border-left: 0px solid rgb(191, 191, 191); */
+    /* border-radius: 0 5px 0 0; */
+    border-right:1px solid rgb(191, 191, 191);
 }
 
 /* #documentation-tab{ */
@@ -884,7 +888,7 @@ body {
     margin: 0 30px;
     width: 1384px;
     height: 21px;
-    background: #ebebeb;
+    background: #f6f6f6;
     border-radius:0 0 8px 8px;
   }
 
