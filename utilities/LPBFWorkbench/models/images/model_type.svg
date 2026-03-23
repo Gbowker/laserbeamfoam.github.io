@@ -1,0 +1,19 @@
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#a3a3a3">
+<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#a1a1a1" stroke-width="3.4560000000000004">
+<rect x="8" y="40" width="16" height="16"/>
+<rect x="40" y="40" width="16" height="16"/>
+<rect x="24" y="8" width="16" height="16"/>
+<polyline points="48 40 48 32 16 32 16 40"/>
+<line x1="32" y1="32" x2="32" y2="24"/>
+</g>
+<g id="SVGRepo_iconCarrier">
+<rect x="8" y="40" width="16" height="16"/>
+<rect x="40" y="40" width="16" height="16"/>
+<rect x="24" y="8" width="16" height="16"/>
+<polyline points="48 40 48 32 16 32 16 40"/>
+<line x1="32" y1="32" x2="32" y2="24"/>
+</g>
+</svg>

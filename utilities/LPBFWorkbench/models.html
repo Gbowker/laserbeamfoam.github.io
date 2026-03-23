@@ -25,26 +25,30 @@
     <div id="app_title">
       <img src="models/images/iform.png" id="iform_logo" alt="logo">
       <img src="models/images/RI_logo.jpg" id="RI_logo" alt="logo">
-      <div id="app_title_text">L-PBF Workbench</div>
+      <img id="software_img" src="models/images/software.svg" alt=""> <div id="app_title_text"> L-PBF Workbench</div>
     </div>
 
     <div id="main_window">
       <div id="tabs">
-        <div class="tab" id="build-plate-tab">&nbsp; &nbsp; &nbsp;  &nbsp;<img src="models/images/power.svg" alt=""> &nbsp;Main page</div>
-        <div class="tab  active-tab" id="build-plate-tab">&nbsp; &nbsp; &nbsp;<img src="models/images/power.svg" alt=""> &nbsp; Build plate</div>
-        <div class="tab" id="results-tab">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<img src="models/images/power.svg" alt=""> &nbsp;Results </div>
-        <div class="tab" id="results-tab"> &nbsp; &nbsp; &nbsp;<img src="models/images/power.svg" alt=""> &nbsp;Animations </div>
-        <div class="tab" id="documentation-tab">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<img src="models/images/power.svg" alt=""> &nbsp; Docs </div>
+        <div class="tab" id="main-page-tab">&nbsp; &nbsp; &nbsp;  &nbsp;<img src="models/images/main_page.svg" alt=""> &nbsp;Main page</div>
+        <div class="tab  active-tab" id="build-plate-tab">&nbsp; &nbsp; &nbsp;<img src="models/images/build_plate.svg" alt=""> &nbsp; Build plate</div>
+        <div class="tab" id="results-tab">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<img src="models/images/results.svg" alt=""> &nbsp;Results </div>
+        <div class="tab" id="animations-tab"> &nbsp; &nbsp; &nbsp;<img src="models/images/animations.svg" alt=""> &nbsp;Animations </div>
+        <!-- <div class="tab" id="documentation-tab">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<img src="models/images/power.svg" alt=""> &nbsp; Docs </div> -->
       </div>
       <div class="window" id="build-plate"></div>
       <div class="window hidden" id="results">results xd</div>
-      <div class="window hidden" id="documentation">documentation xd</div>
+      <!-- <div class="window hidden" id="documentation">documentation xd</div> -->
     </div>
 
 
     <div id="container">
 
       <div id="settings_tab">
+
+
+
+
 
         <div class="input_container" id="input_files">
           <div id="liggghts_input_container_title">
@@ -108,9 +112,16 @@
         </div>
 
 
+
+
+
+
+
+
         <div class="input_container" id="printer_settings">
           <div id="liggghts_input_container_title">
-            <span class="section_title">Print settings</span>
+            <span class="section_title">Print settings </span>  <button id="reset_settings"> <img id="plot_arrow" src="models/images/reset_settings.svg"
+              alt=""> </button>          
             <hr style="width:100%; border:none; border-top:2px solid #999;" />
           </div>
           <div id="liggghts_input_container2">
@@ -141,7 +152,7 @@
             </div>
 
             <div class="print_setting">
-              <img class="print_settings_img" src="models/images/radius.svg" alt="">
+              <img class="print_settings_img" id="beam_radius_img" src="models/images/radius.svg" alt="">
               <span>Beam radius </span>
               <input type="number" value="37.5" class="print_settings_input">
               <div type="text" class="print_settings_units"> $\left[\mu\mathrm{m}\right]$ </div>
@@ -190,8 +201,7 @@
               <div type="text" class="print_settings_units"> $\left[\mathrm{m}/\mathrm{s}\right]$ </div>
             </div>
 
-            <button id="reset_settings"> &nbsp; Reset <img id="plot_arrow" src="models/images/reset_settings.svg"
-                alt=""> </button>
+ 
             <!-- <button id="plot_layer"> <img id="plot_img" src="models/images/plot.svg" alt="">  Plot layer <img id="plot_arrow" src="models/images/plot_arrow.svg" alt=""> </button> -->
 
             <!-- <div class="print_setting">
@@ -233,6 +243,63 @@
           </div>
 
         </div>
+
+
+
+
+
+
+
+        <div class="input_container" id="command_window">
+          <div id="liggghts_input_container_title">
+            <span class="section_title" style="margin-bottom:0">Run</span>
+            <hr style="width:100%; border:none; border-top:2px solid #999;" />
+          </div>
+          <div id="liggghts_input_container">
+
+
+            <div id="output_window"></div>
+
+
+
+            <img src="models/images/model_type.svg" id="model_img" alt=""> <span id="model_">Model</span>  <select class="print_settings_input" id="selected_model">
+              <option value="Physics based">Physics based</option>
+              <!-- <option value="40">40 $\left[\mu\mathrm{m}\right]$ </option> -->
+              <!-- <option value="70">50 $\left[\mu\mathrm{m}\right]$ </option> -->
+            </select>
+
+
+            <button id="run_simulation"> <img id="plot_img" src="models/images/compute.svg" alt=""> Run <img
+                id="plot_arrow" src="models/images/run.svg" alt=""> </button>
+
+            <!-- <span class="span_input_name">Plate width </span><input id="plate_width" class="stress_input" type="number"
+              value="200"><span class="unit_width">$[ \mum]$</span> <button
+              class="change_button minus_button" id="plate_width_minus">-</button> <button class="change_button"
+              id="plate_width_plus">+</button><br>
+          
+            <span class="span_input_name">Plate length$</span><input id="plate_length" class="stress_input" type="number"
+               value="800"><span class="unit_width">$[\mum]$</span> <button
+              class="change_button minus_button" id="plate_length_minus">-</button> <button class="change_button"
+              id="plate_length_plus">+</button><br>
+          
+            <span class="span_input_name">Plate height</span><input id="plate_height" class="stress_input" type="number"
+              value="100"><span class="unit_width">$[\mum]$</span> <button
+              class="change_button minus_button" id="plate_height_minus">-</button> <button class="change_button"
+              id="plate_height_plus">+</button><br>
+          
+            <span class="span_input_name">Layer thickness</span><input id="layer_thickness" class="stress_input"
+              type="number"  value="50"><span class="unit_width">$[\mum]$</span> <button
+              class="change_button minus_button" id="layer_thickness_minus">-</button> <button class="change_button"
+              id="layer_thickness_plus">+</button><br> -->
+
+            <!-- <button id="show_liggghts_input_file">show input file</button> -->
+            <!-- <button id="download_liggghts_input_button">download</button> -->
+
+          </div>
+        </div>
+
+
+
 
 
 
@@ -302,7 +369,7 @@
     </div>
 
     <!-- <button id="reset_all_button">reset</button> -->
-    <div id="footer"></div>
+    <div id="footer" > v1.0 - 01.03.2026</div>
 
   </div>
 
