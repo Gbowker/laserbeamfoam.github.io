@@ -1,294 +1,295 @@
     body {
-      font-family: Arial, Helvetica, sans-serif;
-      background-color: #4b4b4b;
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #4b4b4b;
     }
 
     #mainCanvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 760px;
-      height: 580px;
-      margin: 0 auto;
-      display: block;
-      border: 0;
-      border-radius: 10px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 760px;
+        height: 580px;
+        margin: 0 auto;
+        display: block;
+        border: 0;
+        border-radius: 10px;
     }
 
     #displays {
-      position: relative;
-      width: 60%;
-      height: 850px;
+        position: relative;
+        width: 60%;
+        height: 850px;
     }
 
     #settings_tab {
-      width: 40%;
-      height: 850px;
+        width: 40%;
+        height: 850px;
     }
 
     #laser_position_window {
-      position: relative;
-      height: 830px;
-      width: 98%;
-      border: 2px solid rgb(220 220 220);
-      border-radius: 8px;
+        position: relative;
+        height: 830px;
+        width: 98%;
+        border: 2px solid rgb(220 220 220);
+        border-radius: 8px;
     }
-    
-    #loading{
-      position: absolute;
-      top: 50%;
-      left: 45%;
-      font-size: 25px;
-      color: #686868;
+
+    #loading {
+        position: absolute;
+        top: 50%;
+        left: 45%;
+        font-size: 25px;
+        color: #686868;
     }
 
     #laser_position_window:hover,
     #powder_bed:hover {
 
-      cursor: pointer;
+        cursor: pointer;
     }
 
     #princ_dir_span {
-      display: block;
-      height: 30px;
-      line-height: 30px;
+        display: block;
+        height: 30px;
+        line-height: 30px;
     }
 
     #powder_bed {
-      height: 415px;
-      width: 98%;
-      margin-bottom: 15px;
-      border: 2px solid rgb(220 220 220);
-      border-radius: 8px;
+        height: 415px;
+        width: 98%;
+        margin-bottom: 15px;
+        border: 2px solid rgb(220 220 220);
+        border-radius: 8px;
     }
 
     #settings {
-      height: 850px;
-      width: 98%;
-      border: 2px solid rgb(220 220 220);
-      border-radius: 8px;
+        height: 850px;
+        width: 98%;
+        border: 2px solid rgb(220 220 220);
+        border-radius: 8px;
     }
 
     canvas {
-      border-radius: 8px;
+        border-radius: 8px;
     }
 
     #princ_values_span {
-      display: block;
-      height: 30px;
-      line-height: 30px;
+        display: block;
+        height: 30px;
+        line-height: 30px;
     }
 
     #container {
-      display: flex;
-      margin: 20px auto;
-      width: 1385px;
-      height: 806px;
+        display: flex;
+        margin: 20px auto;
+        width: 1385px;
+        height: 806px;
     }
 
     #controlls {
-      display: flex;
-      height: 450px;
-      width: 100%;
+        display: flex;
+        height: 450px;
+        width: 100%;
     }
 
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
+        -webkit-appearance: none;
+        margin: 0;
     }
 
     #app {
-      position: relative;
-      background-color: white;
-      margin: 10px auto;
-      border-radius: 12px;
-      width: 1450px;
-      height: 970px;
-      border: 7px solid #0f438e;
+        position: relative;
+        background-color: white;
+        margin: 10px auto;
+        border-radius: 12px;
+        width: 1450px;
+        height: 970px;
+        border: 7px solid #0f438e;
     }
 
     #input_stress_tensor {
-      width: 367px;
-      height: 400px;
+        width: 367px;
+        height: 400px;
     }
 
 
     #app_title {
-    display: flex;
-    height: 37px;
-    width: 200px;
-    margin: 10px auto 0;
-    /* box-sizing: border-box; */
-    padding-left: 10px;
-    padding-bottom: 3px;
-    line-height: 35px;
-    width: 1366px;
-    font-weight: bold;
-    font-size: 22px;
-    color: #505050;
-    border-bottom: 2px solid #a5a5a5;
+        display: flex;
+        height: 37px;
+        width: 200px;
+        margin: 10px auto 0;
+        /* box-sizing: border-box; */
+        padding-left: 10px;
+        padding-bottom: 3px;
+        line-height: 35px;
+        width: 1366px;
+        font-weight: bold;
+        font-size: 22px;
+        color: #505050;
+        border-bottom: 2px solid #a5a5a5;
     }
 
     #cube:hover {
-      cursor: pointer;
+        cursor: pointer;
     }
 
     #cube:active {
-      cursor: grab;
+        cursor: grab;
     }
 
     #outpuangle_controllst_info {
-      width: 44%;
-      height: 400px;
+        width: 44%;
+        height: 400px;
     }
 
     #angle_controlls {
-      width: 28%;
-      display: flex;
-      height: 280px;
-      margin-top: 32px;
-      flex-wrap: wrap;
-      justify-content: space-evenly;
+        width: 28%;
+        display: flex;
+        height: 280px;
+        margin-top: 32px;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
     }
 
     .control,
     .rs-transition,
     .rs-handle-round {
-      cursor: pointer !important;
+        cursor: pointer !important;
     }
 
     .control:active,
     .rs-transition:active,
     .rs-handle-round:active {
-      cursor: pointer !important;
+        cursor: pointer !important;
     }
 
     #output_info input::-webkit-outer-spin-button,
     #output_info input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
+        -webkit-appearance: none;
+        margin: 0;
     }
 
     .rs-tooltip-text {
-      font-size: 17px !important;
-      width: 56px !important;
+        font-size: 17px !important;
+        width: 56px !important;
     }
 
     .change_button:hover {
-      cursor: pointer;
-      color: #2e85c7;
-      background: #fff;
+        cursor: pointer;
+        color: #2e85c7;
+        background: #fff;
     }
 
     .change_button,
     .minus_button {
-      color: #fff;
-      background: #2e85c7;
-      cursor: pointer;
-      border: 2px solid #2e85c7;
-      font-size: 14px;
-      transition: all 0.2s linear;
-      -o-transition: all 0.2s linear;
-      font-weight: bold;
-      border-radius: 3px;
+        color: #fff;
+        background: #2e85c7;
+        cursor: pointer;
+        border: 2px solid #2e85c7;
+        font-size: 14px;
+        transition: all 0.2s linear;
+        -o-transition: all 0.2s linear;
+        font-weight: bold;
+        border-radius: 3px;
     }
 
     .minus_button {
-      color: #fff;
-      background: #676767;
-      border: 3px solid #676767;
+        color: #fff;
+        background: #676767;
+        border: 3px solid #676767;
     }
 
     .minus_button:hover {
-      color: #676767;
-      background: #fff;
+        color: #676767;
+        background: #fff;
     }
 
     .span_input_name {
-      display: inline-block;
-      width: 150px;
+        display: inline-block;
+        width: 150px;
     }
 
     .unit_width {
-      display: inline-block;
-      width: 50px;
+        display: inline-block;
+        width: 50px;
     }
 
     #laser_properties_input_container,
     #liggghts_input_container {
-      padding: 12px 20px 20px 20px;
-      background-color: #aeaeae24;
-      width: 458px;
-      height: 213px;
-      margin: 0 auto 11px 16px;
-      border-radius: 0 0 8px 8px ;
-      border-width: 0 4px 4px 4px;
-      border-style: solid;
-      border-color: #939393;
+        padding: 12px 20px 20px 20px;
+        background-color: #aeaeae24;
+        width: 458px;
+        height: 213px;
+        margin: 0 auto 11px 16px;
+        border-radius: 0 0 8px 8px;
+        border-width: 0 4px 4px 4px;
+        border-style: solid;
+        border-color: #939393;
     }
 
-    #laser_properties_input_container_title,#liggghts_input_container_title{
-      padding: 12px 20px 20px 20px;
-      background-color: #939393;
-      width: 458px;
-      height: 6px;
-      margin: 1px auto 0 16px;
-      border-radius: 8px 8px 0 0;
-      border-width: 4px 4px 0 4px;
-      border-style: solid;
-      border-color: #939393;
+    #laser_properties_input_container_title,
+    #liggghts_input_container_title {
+        padding: 12px 20px 20px 20px;
+        background-color: #939393;
+        width: 458px;
+        height: 6px;
+        margin: 1px auto 0 16px;
+        border-radius: 8px 8px 0 0;
+        border-width: 4px 4px 0 4px;
+        border-style: solid;
+        border-color: #939393;
     }
 
     #laser_properties_input_container {
-      height: 376px;    
-      /* margin-top: 20px; */
+        height: 376px;
+        /* margin-top: 20px; */
     }
 
-    #laser_properties_input_container_title{
-      margin-top: 20px;
+    #laser_properties_input_container_title {
+        margin-top: 20px;
     }
 
     #output_info {
-      width: 590px !important;
-      display: flex;
-      margin-left: 12px;
-      width: 360px;
+        width: 590px !important;
+        display: flex;
+        margin-left: 12px;
+        width: 360px;
     }
 
     #output_stresses {
-      width: 270px;
+        width: 270px;
     }
 
     #input_tauxz {
-      margin-left: 7px;
+        margin-left: 7px;
     }
 
     .stress_input,
     .stress_output {
-      padding-left: 12px;
-      box-sizing: border-box;
-      border-radius: 6px;
-      font-size: 18px;
-      width: 85px;
-      height: 30px;
-      margin: 5px;
+        padding-left: 12px;
+        box-sizing: border-box;
+        border-radius: 6px;
+        font-size: 18px;
+        width: 85px;
+        height: 30px;
+        margin: 5px;
     }
 
     .stress_output {
-      width: 69px;
-      border: 0 0 1px 0 solid black !important;
+        width: 69px;
+        border: 0 0 1px 0 solid black !important;
     }
 
     #show_liggghts_input_file,
     #align-button {
-      margin-top: 40px;
+        margin-top: 40px;
     }
 
     #output_stresses_title {
-      width: 100%;
-      height: 30px;
-      line-height: 30px;
+        width: 100%;
+        height: 30px;
+        line-height: 30px;
     }
 
     #show_liggghts_input_file,
@@ -296,346 +297,363 @@
     #align-button,
     #download_liggghts_input_button,
     #download_all_case_files_button,
-    #download_laser_prop_input_button,#reset_all_button {
-      color: #fff;
-      background: #2e85c7;
-      cursor: pointer;
-      text-transform: uppercase;
-      border: 2px solid #2e85c7;
-      margin-top: 15px;
-      margin-bottom: 5px;
-      font-size: 14px;
-      padding: 8px 5px;
-      width: 137px;
-      height: 20px;
-      transition: all 0.2s linear;
-      -o-transition: all 0.2s linear;
-      font-weight: bold;
-      border-radius: 3px;
-      -webkit-appearance: none;
-      -webkit-box-sizing: content-box;
-      box-sizing: content-box;
-      line-height: 22px;
+    #download_laser_prop_input_button,
+    #reset_all_button {
+        color: #fff;
+        background: #2e85c7;
+        cursor: pointer;
+        text-transform: uppercase;
+        border: 2px solid #2e85c7;
+        margin-top: 15px;
+        margin-bottom: 5px;
+        font-size: 14px;
+        padding: 8px 5px;
+        width: 137px;
+        height: 20px;
+        transition: all 0.2s linear;
+        -o-transition: all 0.2s linear;
+        font-weight: bold;
+        border-radius: 3px;
+        -webkit-appearance: none;
+        -webkit-box-sizing: content-box;
+        box-sizing: content-box;
+        line-height: 22px;
     }
 
 
     #show_liggghts_input_file,
     #show_laser_prop_input_files {
-      margin-left: 140px;
+        margin-left: 140px;
     }
 
-    #reset_all_button{
-      width: 80px;
-      position: absolute;
-      /* margin-top: 18px; */
-      /* bottom: 13px; */
-      left: 42px;
+    #reset_all_button {
+        width: 80px;
+        position: absolute;
+        /* margin-top: 18px; */
+        /* bottom: 13px; */
+        left: 42px;
     }
 
     #download_liggghts_input_button,
     #download_all_case_files_button,
-    #download_laser_prop_input_button, #reset_all_button{
-      color: #000000;
-      background: #d2d2d2;
-      border: 2px solid #1c1c1c;
-      margin-left: 6px;
+    #download_laser_prop_input_button,
+    #reset_all_button {
+        color: #000000;
+        background: #d2d2d2;
+        border: 2px solid #1c1c1c;
+        margin-left: 6px;
     }
 
     #reset_all_button {
-      background-color: #5c5c5c;
-      color: #ffffff;
+        background-color: #5c5c5c;
+        color: #ffffff;
     }
 
     #download_liggghts_input_button:not([disabled]):hover,
     #download_all_case_files_button:not([disabled]):hover,
-    #download_laser_prop_input_button:not([disabled]):hover,#reset_all_button:not([disabled]):hover{
-      color: #000000;
-      background: #fff;
+    #download_laser_prop_input_button:not([disabled]):hover,
+    #reset_all_button:not([disabled]):hover {
+        color: #000000;
+        background: #fff;
     }
 
     #download_all_case_files_button {
-      margin-top: 18px;
-      color: #ffffff;
-      background: #365115;
-      width: 140px;
-      position: relative;
-      left: 1243px;
+        margin-top: 18px;
+        color: #ffffff;
+        background: #365115;
+        width: 140px;
+        position: relative;
+        left: 1243px;
     }
 
     #align-button {
-      width: 200px;
+        width: 200px;
     }
 
     #show_liggghts_input_file:not([disabled]):hover,
     #align-button:not([disabled]):hover,
     #show_laser_prop_input_files:not([disabled]):hover {
-      color: #2e85c7;
-      background: #fff;
+        color: #2e85c7;
+        background: #fff;
     }
 
     .section_title {
-      display: block;
-      font-weight: bold;
-      height: 30px;
-      line-height: 22px;
-      color: #f4f4f4;
-      margin: -4px 0 10px 0;
+        display: block;
+        font-weight: bold;
+        height: 30px;
+        line-height: 22px;
+        color: #f4f4f4;
+        margin: -4px 0 10px 0;
     }
 
     #alfa {
-      background-image: url("../../images/rotate_x_dial.png");
-      background-size: cover;
+        background-image: url("../../images/rotate_x_dial.png");
+        background-size: cover;
     }
 
     #beta {
-      background-image: url("../../images/rotate_y_dial.png");
-      background-size: cover;
+        background-image: url("../../images/rotate_y_dial.png");
+        background-size: cover;
     }
 
     #gamma {
-      background-image: url("../../images/rotate_z_dial.png");
-      background-size: cover;
+        background-image: url("../../images/rotate_z_dial.png");
+        background-size: cover;
     }
 
 
     #info_div {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 1830px;
-      background-color: rgba(0, 0, 0, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 1830px;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
     }
 
     #info_div_content {
-      position: absolute;
-      top: 80px;
-      background-color: #f1f1f1;
-      padding: 30px 20px 20px 20px;
-      border: 3px solid #959595;
-      border-radius: 10px;
-      text-align: center;
-      width: 800px;
-      height: 800px;
+        position: absolute;
+        top: 80px;
+        background-color: #f1f1f1;
+        padding: 30px 20px 20px 20px;
+        border: 3px solid #959595;
+        border-radius: 10px;
+        text-align: center;
+        width: 800px;
+        height: 800px;
     }
 
     .hidden {
-      opacity: 0 !important;
-      visibility: hidden !important;
-      pointer-events: none !important;
-      transition: opacity 0.4s ease, visibility 0.4s ease;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        transition: opacity 0.4s ease, visibility 0.4s ease;
     }
 
     .revealed {
-      opacity: 1 !important;
-      visibility: visible !important;
-      pointer-events: auto !important;
-      transition: opacity 0.4s ease, visibility 0.4s ease;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        transition: opacity 0.4s ease, visibility 0.4s ease;
     }
 
 
     #info_div_input {
-      width: 100%;
-      height: 95%;
-      font-size: 14px;
-      padding: 22px 19px 10px 17px;
-      box-sizing: border-box;
-      border-radius: 0 0 18px 18px;
-      border: 2px solid #959595;
-      margin-top: 35px;
+        width: 100%;
+        height: 95%;
+        font-size: 14px;
+        padding: 22px 19px 10px 17px;
+        box-sizing: border-box;
+        border-radius: 0 0 18px 18px;
+        border: 2px solid #959595;
+        margin-top: 35px;
     }
 
     #info_div_input {
-      border: none;
+        border: none;
     }
 
     #info_div_title_1,
     #info_div_title_2,
     #info_div_title_3 {
-      width: 200px;
-      height: 21px;
-      position: absolute;
-      top: 24px;
-      font-size: 20px;
-      font-weight: bold;
-      color: #505050;
-      padding: 10px;
-      background-color: #f1f1f1;
-      border-radius: 8px 0 0 0;
+        width: 200px;
+        height: 21px;
+        position: absolute;
+        top: 24px;
+        font-size: 20px;
+        font-weight: bold;
+        color: #505050;
+        padding: 10px;
+        background-color: #f1f1f1;
+        border-radius: 8px 0 0 0;
     }
 
     #info_div_title_2 {
-      left: 240px;
-      border-radius: 0 0px 0 0;
+        left: 240px;
+        border-radius: 0 0px 0 0;
     }
 
     #info_div_title_3 {
-      left: 460px;
-      border-radius: 0 8px 0 0;
+        left: 460px;
+        border-radius: 0 8px 0 0;
     }
 
     #info_div_title_1:hover,
     #info_div_title_2:hover,
     #info_div_title_3:hover {
-      cursor: pointer;
+        cursor: pointer;
     }
 
     #close_img,
     #copy_img {
-      width: 30px;
-      height: 30px;
+        width: 30px;
+        height: 30px;
     }
 
     #close_div {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      width: 30px;
-      height: 30px;
-      background-color: #f1f1f1;
-      border-radius: 0 8px 0 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        width: 30px;
+        height: 30px;
+        background-color: #f1f1f1;
+        border-radius: 0 8px 0 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     #copy_div {
-      position: absolute;
-      top: 20px;
-      right: 75px;
-      width: 30px;
-      height: 30px;
-      background-color: #f1f1f1;
-      border-radius: 0 8px 0 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+        position: absolute;
+        top: 20px;
+        right: 75px;
+        width: 30px;
+        height: 30px;
+        background-color: #f1f1f1;
+        border-radius: 0 8px 0 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     #copy_div:hover,
     #close_div:hover {
-      cursor: pointer;
-      scale: 1.1;
+        cursor: pointer;
+        scale: 1.1;
     }
 
     .info_div_active {
-      background-color: white !important;
+        background-color: white !important;
     }
 
 
     #light_theme:hover,
     #dark_theme:hover {
-      cursor: pointer;
+        cursor: pointer;
     }
 
     #light_theme,
     #dark_theme {
-      position: absolute;
-      border-radius: 50%;
-      top: 17px;
-      right: 72px;
-      /* bottom: 120px; */
-      width: 20px;
-      height: 20px;
-      box-sizing: border-box;
+        position: absolute;
+        border-radius: 50%;
+        top: 17px;
+        right: 72px;
+        /* bottom: 120px; */
+        width: 20px;
+        height: 20px;
+        box-sizing: border-box;
     }
 
     #light_theme {
-      background-color: #cdcdcd;
+        background-color: #cdcdcd;
     }
 
     #dark_theme {
-      background-color: #2f2f2f;
-      right: 48px
+        background-color: #2f2f2f;
+        right: 48px
     }
 
     .active_theme {
-      border: 2px solid #2e85c7;
+        border: 2px solid #2e85c7;
     }
 
     textarea:focus {
-      outline: none;
-      box-shadow: none;
-      border-color: inherit;
+        outline: none;
+        box-shadow: none;
+        border-color: inherit;
     }
 
     .noselect {
-      user-select: none;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
     }
 
     #reset_button {
-      position: absolute;
-      bottom: 29px;
-      left: 47px;
-      width: 26px;
-      height: 26px;
+        position: absolute;
+        bottom: 29px;
+        left: 47px;
+        width: 26px;
+        height: 26px;
     }
 
     #run_button {
-      position: absolute;
-      left: 10px;
-      bottom: 25px;
-      width: 35px;
-      height: 35px;
+        position: absolute;
+        left: 10px;
+        bottom: 25px;
+        width: 35px;
+        height: 35px;
     }
 
     #run_button:hover,
     #reset_button:hover {
-      cursor: pointer;
-      scale: 1.1;
-      transition: all 0.1s ease-in-out;
+        cursor: pointer;
+        scale: 1.1;
+        transition: all 0.1s ease-in-out;
     }
 
     .flash-white,
     #run_button.flash-white:hover,
     #reset_button.flash-white:hover {
-      filter: brightness(10000%) invert(0%) sepia(0%) saturate(0%);
+        filter: brightness(10000%) invert(0%) sepia(0%) saturate(0%);
     }
 
-    #disclamer_and_license{
-      width:1000px;
-      height: 800px;
-      /* border: 3px solid #959595; */
-      margin: 0 auto;
-      margin-top: 30px;
-      color:rgb(221, 221, 221);
-        text-align:justify;
+    #disclamer_and_license {
+        width: 1000px;
+        height: 800px;
+        /* border: 3px solid #959595; */
+        margin: 0 auto;
+        margin-top: 30px;
+        color: rgb(221, 221, 221);
+        text-align: justify;
     }
 
-    #lpbf_logo{
-      margin-right: 15px;
-      margin-bottom: 2px;
-      width: 35px;
-      height: 35px;
-      border-radius: 20%;
+    #lpbf_logo {
+        margin-right: 15px;
+        margin-bottom: 2px;
+        width: 35px;
+        height: 35px;
+        border-radius: 20%;
     }
 
-    #copyright{
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: 45px;
-      height: 40px;
-      line-height: 40px;
-      font-size: 18px;
-      /* border: 1px solid #959595; */
-      margin-bottom: 45px;
+    #copyright {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 45px;
+        height: 40px;
+        line-height: 40px;
+        font-size: 18px;
+        /* border: 1px solid #959595; */
+        margin-bottom: 45px;
     }
 
     #disclamer_and_license p {
-      font-weight: 700;
-      font-size: 20px;
-      text-align:center;
+        font-weight: 700;
+        font-size: 20px;
+        text-align: center;
     }
 
     #disclamer_and_license a {
-      color: #2e85c7;
-      text-decoration: none;
+        color: #2e85c7;
+        text-decoration: none;
     }
+
+    /* .compute-window-select-button {
+        position: absolute;
+        top: 20px;
+        right: 120px;
+        padding: 8px 12px;
+        background: #fff;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        border-radius: 3px;
+        z-index: 9900!important;
+        font-size: 12px;
+    } */
+
