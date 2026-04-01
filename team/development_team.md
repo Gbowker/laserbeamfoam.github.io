@@ -43,5 +43,23 @@ nav_order: 6
 <img align="left"  width="22" style="padding-right:6px;padding-top:4px" src="svgs/orcid.png">[0000-0001-6924-2428](https://orcid.org/0000-0001-6924-2428)<br> 
 
 ---
+<img align="left" width="170" style="padding-right:30px" src="images/patrick.jpg"/>
+## Patrick O'Toole 
+
+<img align="left"  width="22" style="padding-right:6px;padding-top:3px" src="svgs/building.svg">  University of Stuttgart / Institut für Strahlwerkzeuge (IFSW)<br> 
+<img align="left"  width="22" style="padding-right:6px;padding-top:4px" src="svgs/mail.svg"> patrick.otoole@ifsw.uni-stuttgart.de <br>
+<img align="left"  width="22" style="padding-right:6px;padding-top:5px" src="svgs/github_svg.svg"> [piotxyz](https://github.com/piotxyz){:target="_blank"}  <br> 
+<img align="left"  width="22" style="padding-right:6px;padding-top:4px" src="svgs/orcid.png">[0000-0001-8047-9063](https://orcid.org/0000-0001-8047-9063)<br> 
+
+---
+<img align="left" width="170" style="padding-right:30px" src="images/roman.png"/>
+## Roman Bialek
+
+<img align="left"  width="22" style="padding-right:6px;padding-top:3px" src="svgs/building.svg">  The University of Manchester / Henry Royce Institute<br> 
+<img align="left"  width="22" style="padding-right:6px;padding-top:4px" src="svgs/mail.svg"> <br>
+<img align="left"  width="22" style="padding-right:6px;padding-top:5px" src="svgs/github_svg.svg"> [roman-bialek](https://github.com/roman-bialek){:target="_blank"}  <br> 
+<img align="left"  width="22" style="padding-right:6px;padding-top:4px" src="svgs/orcid.png"><br> 
+
+---
 <br>
 <br>
