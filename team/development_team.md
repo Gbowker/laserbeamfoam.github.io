@@ -56,7 +56,7 @@ nav_order: 6
 ## Roman Bialek
 
 <img align="left"  width="22" style="padding-right:6px;padding-top:3px" src="svgs/building.svg">  The University of Manchester / Henry Royce Institute<br> 
-<img align="left"  width="22" style="padding-right:6px;padding-top:4px" src="svgs/mail.svg"> <br>
+<img align="left"  width="22" style="padding-right:6px;padding-top:4px" src="svgs/mail.svg"> roman.bialek@postgrad.manchester.ac.uk <br>
 <img align="left"  width="22" style="padding-right:6px;padding-top:5px" src="svgs/github_svg.svg"> [roman-bialek](https://github.com/roman-bialek){:target="_blank"}  <br> 
 <img align="left"  width="22" style="padding-right:6px;padding-top:4px" src="svgs/orcid.png"><br> 
 
