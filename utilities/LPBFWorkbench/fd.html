@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>LPBF Heat Diffusion GPU Accurate</title>
+<script type="module">
+import { GPU } from 'https://cdn.skypack.dev/gpu.js';
+
+
+document.addEventListener('DOMContentLoaded', () => {
+
+  // -----------------------------
+  // Simulation parameters
+  // -----------------------------
+  const NX = 512;
+  const NY = 512;
+  const DX = 0.001; // mm, X spacing
+  const DY = 0.001; // mm, Y spacing
+  const ALPHA = 7.2 / (4420 * 560); // thermal diffusivity
+  const DT = 0.01; // time step
+  const T_AMBIENT = 300;
+  const T_MELT = 1941;
+
+  let laserDiameter = 50; // µm
+  let laserPower = 1559; // W
+
+  let animationRunning = false;
+  let frame = 0;
+  let fullPath = [];
+
+  const gpu = new GPU();
+
+  // -----------------------------
+  // FD kernel (exact Python replication)
+  // -----------------------------
+  const fdStepKernel = gpu.createKernel(function(T, Q, alpha, dt, dx, dy, T_amb) {
+    const i = this.thread.y;
+    const j = this.thread.x;
+    const NY = this.constants.NY;
+    const NX = this.constants.NX;
+
+    const ip = i < NY-1 ? i+1 : i;
+    const im = i > 0 ? i-1 : i;
+    const jp = j < NX-1 ? j+1 : j;
+    const jm = j > 0 ? j-1 : j;
+
+    const d2Tdx2 = (T[i][jp] - 2*T[i][j] + T[i][jm]) / (dx*dx);
+    const d2Tdy2 = (T[ip][j] - 2*T[i][j] + T[im][j]) / (dy*dy);
+
+    let dTdt = alpha * (d2Tdx2 + d2Tdy2) + Q[i][j];
+    let T_new = T[i][j] + dt * dTdt;
+
+    // boundary = ambient
+    if (i===0 || i===NY-1 || j===0 || j===NX-1) T_new = T_amb;
+    return T_new;
+  }).setOutput([NX, NY]).setConstants({NX, NY});
+
+  // -----------------------------
+  // Gaussian laser kernel
+  // -----------------------------
+  const gaussianFluxKernel = gpu.createKernel(function(lx, ly, power, r_eff) {
+    const i = this.thread.y;
+    const j = this.thread.x;
+    const NX = this.constants.NX;
+    const NY = this.constants.NY;
+
+    const x = j / NX;
+    const y = i / NY;
+    const r2 = (x - lx)*(x - lx) + (y - ly)*(y - ly);
+    const I0 = power / (Math.PI * r_eff * r_eff);
+    return I0 * Math.exp(-2 * r2 / (r_eff*r_eff));
+  }).setOutput([NX, NY]).setConstants({NX, NY});
+
+  // -----------------------------
+  // Temperature field
+  // -----------------------------
+  let T = Array(NY).fill(0).map(_=>Array(NX).fill(T_AMBIENT));
+
+  // -----------------------------
+  // Canvas setup (1:1 aspect)
+  // -----------------------------
+  const canvas = document.createElement('canvas');
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+
+  function resizeCanvas() {
+    const size = Math.min(window.innerWidth, window.innerHeight);
+    canvas.width = size;
+    canvas.height = size;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  // -----------------------------
+  // Inferno colormap
+  // -----------------------------
+  function infernoColor(t){
+    t = Math.max(T_AMBIENT, Math.min(T_MELT, t));
+    const x = (t-T_AMBIENT)/(T_MELT-T_AMBIENT);
+    const c = [
+      [0,0,4],[31,12,72],[85,15,109],[136,34,106],
+      [186,54,85],[227,89,51],[249,140,10],[249,201,50],[252,255,164]
+    ];
+    const idx = x*(c.length-1);
+    const i0 = Math.floor(idx);
+    const i1 = Math.min(c.length-1, i0+1);
+    const f = idx-i0;
+    const r = c[i0][0]*(1-f)+c[i1][0]*f;
+    const g = c[i0][1]*(1-f)+c[i1][1]*f;
+    const b = c[i0][2]*(1-f)+c[i1][2]*f;
+    return [r,g,b];
+  }
+
+  // -----------------------------
+  // UI
+  // -----------------------------
+  const laserInput = document.createElement('input');
+  laserInput.type='number'; laserInput.value=laserDiameter;
+  document.body.appendChild(laserInput);
+  document.body.appendChild(document.createTextNode(' Laser diameter (µm) '));
+  laserInput.addEventListener('change', ()=>laserDiameter=parseFloat(laserInput.value));
+
+  const powerInput = document.createElement('input');
+  powerInput.type='number'; powerInput.value=laserPower;
+  document.body.appendChild(powerInput);
+  document.body.appendChild(document.createTextNode(' Laser power (W) '));
+  powerInput.addEventListener('change', ()=>laserPower=parseFloat(powerInput.value));
+
+  const fileInput = document.createElement('input');
+  fileInput.type='file'; document.body.appendChild(fileInput);
+
+  const rangeDiv = document.createElement('div');
+  rangeDiv.innerHTML = `
+    Xmin (mm): <input type="number" id="xmin"><br>
+    Xmax (mm): <input type="number" id="xmax"><br>
+    Ymin (mm): <input type="number" id="ymin"><br>
+    Ymax (mm): <input type="number" id="ymax"><br>
+  `;
+  document.body.appendChild(rangeDiv);
+
+  const animateBtn = document.createElement('button');
+  animateBtn.innerText='Start Animation';
+  document.body.appendChild(animateBtn);
+
+  // -----------------------------
+  // Load path
+  // -----------------------------
+  fileInput.addEventListener('change', e=>{
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = evt=>{
+      const lines = evt.target.result.trim().split('\n');
+      const header = lines[0].split(/\t|,/).map(h=>h.trim());
+      const xCol = header.findIndex(h=>h.includes('Demand X'));
+      const yCol = header.findIndex(h=>h.includes('Demand Y'));
+      fullPath = lines.slice(1).map(l=>{
+        const row = l.split(/\t|,/).map(Number);
+        return {x: row[xCol]*1000, y: row[yCol]*1000};
+      });
+      console.log('Loaded path points:', fullPath.length);
+      frame=0;
+    };
+    reader.readAsText(file);
+  });
+
+  // -----------------------------
+  // Animation
+  // -----------------------------
+  animateBtn.addEventListener('click', ()=>{
+    if(animationRunning) return;
+    if(!fullPath.length) {console.log('No path loaded'); return;}
+    animationRunning=true;
+    step();
+  });
+
+  function step(){
+    const xmin=parseFloat(document.getElementById('xmin').value||-Infinity)*1000;
+    const xmax=parseFloat(document.getElementById('xmax').value||Infinity)*1000;
+    const ymin=parseFloat(document.getElementById('ymin').value||-Infinity)*1000;
+    const ymax=parseFloat(document.getElementById('ymax').value||Infinity)*1000;
+
+    const path = fullPath.filter(p=>p.x>=xmin && p.x<=xmax && p.y>=ymin && p.y<=ymax);
+    if(path.length===0){console.log('No points in range'); return;}
+
+    const k = frame % path.length;
+    const lx = (path[k].x - xmin)/(xmax-xmin);
+    const ly = (path[k].y - ymin)/(ymax-ymin);
+    const r_eff = (laserDiameter/2)/Math.max(xmax-xmin, ymax-ymin);
+
+    const Q = gaussianFluxKernel(lx, ly, laserPower, r_eff);
+    T = fdStepKernel(T, Q, ALPHA, DT, DX, DY, T_AMBIENT);
+
+    // Draw
+    const img = ctx.createImageData(NX, NY);
+    let Tmax=T_AMBIENT;
+    for(let i=0;i<NY;i++){
+      for(let j=0;j<NX;j++){
+        const t=T[i][j]||T_AMBIENT;
+        Tmax=Math.max(Tmax,t);
+        const [r,g,b]=infernoColor(t);
+        const idx=(i*NX+j)*4;
+        img.data[idx]=r; img.data[idx+1]=g; img.data[idx+2]=b; img.data[idx+3]=255;
+      }
+    }
+    ctx.putImageData(img,0,0);
+    ctx.drawImage(canvas,0,0,NX,NY,0,0,canvas.width,canvas.height);
+
+    console.log(`Frame ${frame} | Tmax=${Tmax.toFixed(1)} K`);
+    frame++;
+    requestAnimationFrame(step);
+  }
+
+});
+</script>
+</head>
+<body style="background:#111;color:white;margin:0;padding:10px;">
+<p>Load LPBF CSV file and set laser diameter & power</p>
+</body>
+</html>

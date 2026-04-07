@@ -5,17 +5,17 @@ async function main() {
     const drawBtn = document.createElement("button");
     drawBtn.classList.add("compute-window-select-button");
     drawBtn.textContent = "📐 Draw Square";
-    drawBtn.style.cssText = "position: absolute; top: 55px; right: 120px; padding: 8px 12px; background: #fff; border: 1px solid #ccc; cursor: pointer; border-radius: 3px; z-index: 9900!important;";
+    drawBtn.style.cssText = "position: absolute; top: 55px; height:30px; right: 120px; line-height:30px; padding:0px 12px; background: #fff; border: 1px solid #ccc; cursor: pointer; border-radius: 3px; z-index: 9900!important;";
     parent.appendChild(drawBtn);
 
     const clearBtn = document.createElement("button");
     clearBtn.textContent = "Clear";
-    clearBtn.style.cssText = "position: absolute; top: 55px; right: 220px; padding: 8px 12px; background: #fff; border: 1px solid #ccc; cursor: pointer; border-radius: 3px; z-index: 9900!important;";
+    clearBtn.style.cssText = "position: absolute; top: 55px; right: 252px; height:30px;line-height:30px;  padding: 0px 12px; background: #fff; border: 1px solid #ccc; cursor: pointer; border-radius: 3px; z-index: 9900!important;";
     parent.appendChild(clearBtn);
 
     const coordPanel = document.createElement("div");
     coordPanel.style.cssText = `
-        position: absolute; top: 55px; right: 290px;
+        position: absolute; top: 55px; left: 719px;
         display: flex; align-items: center; gap: 4px;
         background: #fff; border: 1px solid #ccc; border-radius: 3px;
         padding: 4px 8px; z-index: 9900; font-size: 12px;
@@ -42,6 +42,7 @@ async function main() {
     // ── Load data ─────────────────────────────────────────────────────────────
     const response = await fetch("models/data/Packet_data_for_layer_150__laser_4.txt");
     const text = await response.text();
+    let csvText = text;   // kept for the Run handler below
     const lines = text.trim().split("\n");
 
     const rows = lines.slice(1)
@@ -78,9 +79,13 @@ async function main() {
         },
         xAxis: { type: "value", name: "Demand X", scale: true },
         yAxis: { type: "value", name: "Demand Y", scale: true },
+        hoverLayerThreshold: Infinity,
         series: [{
-            name: "Laser path", type: "line", data: data,
-            showSymbol: false, connectNulls: false, silent: true
+            name: "Laser path", type: "scatter", data: data,
+            symbolSize: 2, silent: true,
+            large: true,
+            largeThreshold: 2000,
+            emphasis: { disabled: true }
         }]
     }, { notMerge: true, silent: true });
 
@@ -321,11 +326,36 @@ async function main() {
     let draggingCornerIdx = null;
     let dragCanvasRect = null;
 
+    const cornerDragOverlay = document.createElement("div");
+    cornerDragOverlay.style.cssText = `
+        position: fixed; pointer-events: none; display: none;
+        border: 2px solid rgba(0,98,255,0.8);
+        background: rgba(0,98,255,0.08);
+        box-sizing: border-box; z-index: 99998;
+    `;
+    document.body.appendChild(cornerDragOverlay);
+
+    function updateCornerDragOverlay() {
+        if (!square) { cornerDragOverlay.style.display = "none"; return; }
+        const rect = getCanvasRect();
+        const tl = chart.convertToPixel({ xAxisIndex: 0, yAxisIndex: 0 }, [square.xMin, square.yMax]);
+        const br = chart.convertToPixel({ xAxisIndex: 0, yAxisIndex: 0 }, [square.xMax, square.yMin]);
+        if (!tl || !br) return;
+        cornerDragOverlay.style.display = "block";
+        cornerDragOverlay.style.left   = (rect.left + Math.min(tl[0], br[0])) + "px";
+        cornerDragOverlay.style.top    = (rect.top  + Math.min(tl[1], br[1])) + "px";
+        cornerDragOverlay.style.width  = Math.abs(br[0] - tl[0]) + "px";
+        cornerDragOverlay.style.height = Math.abs(br[1] - tl[1]) + "px";
+    }
+
     handles.forEach((h, i) => {
         h.addEventListener("mousedown", (e) => {
             e.preventDefault(); e.stopPropagation();
             draggingCornerIdx = i;
             dragCanvasRect = getCanvasRect();
+            chart.setOption({ series: [{ name: "Laser path", markArea: { data: [] } }] });
+            cornerDragOverlay.style.display = "block";
+            updateCornerDragOverlay();
         });
     });
 
@@ -366,7 +396,7 @@ async function main() {
             e.preventDefault();
             const d = chart.convertFromPixel({ xAxisIndex: 0, yAxisIndex: 0 },
                 [e.clientX - dragCanvasRect.left, e.clientY - dragCanvasRect.top]);
-            if (d) { CORNERS[draggingCornerIdx].move(square, d); scheduleSquareRender(true); }
+            if (d) { CORNERS[draggingCornerIdx].move(square, d); updateCornerDragOverlay(); updateHandlePositions(); syncInputs(); }
             return;
         }
 
@@ -396,7 +426,10 @@ async function main() {
         // Corner drag end
         if (draggingCornerIdx !== null) {
             draggingCornerIdx = null; dragCanvasRect = null;
-            syncInputs(); return;
+            cornerDragOverlay.style.display = "none";
+            syncInputs();
+            renderSquare(true);
+            return;
         }
 
         // Pan end
@@ -425,32 +458,296 @@ async function main() {
                 yMin: Math.min(p1[1], p2[1]), yMax: Math.max(p1[1], p2[1])
             };
             renderSquare();
+            toggleDrawingMode();
         }
     });
 
     // ── Tab switching ─────────────────────────────────────────────────────────
-    document.querySelectorAll(".tab").forEach(tabEl => {
-        tabEl.onclick = () => {
-            document.querySelectorAll(".tab").forEach(el => el.classList.remove("active-tab"));
-            tabEl.classList.add("active-tab");
+    function switchTab(id) {
+        document.querySelectorAll(".tab").forEach(el => el.classList.remove("active-tab"));
+        document.getElementById(id).classList.add("active-tab");
+        const isBuild = id === "build-plate-tab";
+        document.getElementById("build-plate").classList.toggle("hidden", !isBuild);
+        document.getElementById("results").classList.toggle("hidden",    id !== "results-tab");
+        document.getElementById("animations").classList.toggle("hidden", id !== "animations-tab");
+        onBuildPlateTab = isBuild;
+        setDrawingUIVisible(isBuild);
+    }
 
-            if (tabEl.id === "build-plate-tab") {
-                onBuildPlateTab = true;
-                document.getElementById("build-plate").classList.remove("hidden");
-                document.getElementById("results").classList.add("hidden");
-                setDrawingUIVisible(true);
-            } else if (tabEl.id === "results-tab") {
-                onBuildPlateTab = false;
-                document.getElementById("results").classList.remove("hidden");
-                document.getElementById("build-plate").classList.add("hidden");
-                setDrawingUIVisible(false);
-            } else if (tabEl.id === "documentation-tab") {
-                onBuildPlateTab = false;
-                document.getElementById("build-plate").classList.add("hidden");
-                document.getElementById("results").classList.add("hidden");
-                setDrawingUIVisible(false);
-            }
-        };
+    document.querySelectorAll(".tab").forEach(tabEl => {
+        tabEl.onclick = () => switchTab(tabEl.id);
+    });
+
+    // ── Shared simulation state ───────────────────────────────────────────────
+    let _simResult    = null;
+    let _isPlaying    = false;
+    let _animFrame    = 0;
+    let _animInterval = null;
+    let _resultsChart = null;
+
+    function typedMax(arr) {
+        let m = -Infinity;
+        for (let i = 0; i < arr.length; i++) if (arr[i] > m) m = arr[i];
+        return m;
+    }
+
+    function stopAnimation() {
+        if (_animInterval !== null) { clearInterval(_animInterval); _animInterval = null; }
+        _isPlaying = false;
+    }
+
+    // ── Animations tab ────────────────────────────────────────────────────────
+    function setupAnimationsTab(result) {
+        stopAnimation();
+        const { framesT, framesLaser, NX, NY } = result;
+        const animDiv = document.getElementById("animations");
+        animDiv.style.cssText = "background:#0e0e0e;overflow:hidden;";
+        animDiv.innerHTML = `
+            <div style="width:100%;height:100%;display:flex;flex-direction:column;box-sizing:border-box;">
+                <div id="anim-status" style="
+                    color:#888; padding:5px 12px; font-size:11px; font-family:monospace;
+                    flex-shrink:0; background:#111; border-bottom:1px solid #1e1e1e;">
+                    ${framesT.length} frames &nbsp;|&nbsp; ${NX}×${NY} grid &nbsp;|&nbsp;
+                    cell = ${(result.cell * 1e6).toFixed(1)} µm
+                </div>
+                <canvas id="anim-canvas" style="
+                    flex:1; width:100%; min-height:0; display:block;
+                    object-fit:contain; image-rendering:pixelated; image-rendering:crisp-edges;
+                    background:#000;"></canvas>
+                <div style="
+                    display:flex; align-items:center; gap:10px; padding:7px 12px;
+                    background:#111; border-top:1px solid #1e1e1e; flex-shrink:0;">
+                    <button id="anim-play-btn" title="Play / Pause" style="
+                        background:#2e85c7; color:#fff; border:none; border-radius:4px;
+                        width:30px; height:30px; font-size:15px; cursor:pointer;
+                        flex-shrink:0; line-height:30px; text-align:center;">&#9654;</button>
+                    <input id="anim-scrubber" type="range" min="0"
+                        max="${framesT.length - 1}" value="0"
+                        style="flex:1; accent-color:#2e85c7; cursor:pointer;">
+                    <span id="anim-time" style="
+                        color:#888; font-size:11px; font-family:monospace;
+                        flex-shrink:0; min-width:220px; text-align:right;">
+                        t = 0.000 ms
+                    </span>
+                </div>
+            </div>`;
+
+        const canvas    = document.getElementById("anim-canvas");
+        const playBtn   = document.getElementById("anim-play-btn");
+        const scrubber  = document.getElementById("anim-scrubber");
+        const timeLabel = document.getElementById("anim-time");
+        const Tmin      = 300;
+        const TmaxVis   = result.T_MELT * 1.5;
+
+        function drawFrame(fi) {
+            _animFrame = fi;
+            scrubber.value = fi;
+            const T = framesT[fi];
+            const { lx, ly, pwr, t_ms } = framesLaser[fi];
+
+            // 1. Temperature field (inferno colormap)
+            renderTempFrame(canvas, T, NX, NY, Tmin, TmaxVis);
+
+            // 2. Melt map as semi-transparent white overlay
+            compositeMeltOverlay(canvas, result.framesMelt[fi], NX, NY);
+
+            // 3. Laser circle on top
+            const ctx   = canvas.getContext("2d");
+            const lxRel = (lx - result.domXmin) / (result.domXmax - result.domXmin);
+            const lyRel = (ly - result.domYmin) / (result.domYmax - result.domYmin);
+            ctx.strokeStyle = pwr > 0 ? "cyan" : "#555";
+            ctx.lineWidth   = 0.8;
+            ctx.beginPath();
+            ctx.arc(lxRel * (NX - 1), (1 - lyRel) * (NY - 1),
+                    result.rEff / result.cell, 0, Math.PI * 2);
+            ctx.stroke();
+
+            timeLabel.textContent =
+                `t = ${t_ms.toFixed(3)} ms  |  P = ${pwr.toFixed(0)} W  |` +
+                `  T_max = ${typedMax(T).toFixed(0)} K`;
+        }
+
+        function startPlayback() {
+            _isPlaying = true;
+            playBtn.innerHTML = "&#9646;&#9646;";   // ⏸
+            _animInterval = setInterval(() => {
+                _animFrame = (_animFrame + 1) % framesT.length;
+                drawFrame(_animFrame);
+            }, 40);
+        }
+
+        function pausePlayback() {
+            stopAnimation();
+            playBtn.innerHTML = "&#9654;";   // ▶
+        }
+
+        playBtn.addEventListener("click", () => {
+            if (_isPlaying) pausePlayback(); else startPlayback();
+        });
+
+        scrubber.addEventListener("input", () => {
+            pausePlayback();
+            drawFrame(parseInt(scrubber.value, 10));
+        });
+
+        drawFrame(0);
+        // Start paused — user presses ▶ to begin
+    }
+
+    // ── Results tab ───────────────────────────────────────────────────────────
+    function setupResultsTab(result) {
+        if (_resultsChart) { _resultsChart.dispose(); _resultsChart = null; }
+
+        const resultsDiv = document.getElementById("results");
+        resultsDiv.style.cssText = "background:#0e0e0e;overflow:hidden;";
+        resultsDiv.innerHTML = `
+            <div style="width:100%;height:100%;display:flex;flex-direction:column;box-sizing:border-box;">
+                <div style="
+                    display:flex; align-items:center; gap:10px; padding:7px 12px;
+                    background:#111; border-bottom:1px solid #1e1e1e; flex-shrink:0;">
+                    <span style="color:#888; font-size:12px; font-family:monospace;">View:</span>
+                    <select id="results-select" style="
+                        background:#1e1e1e; color:#ccc; border:1px solid #333;
+                        border-radius:4px; padding:4px 10px; font-size:12px; cursor:pointer;">
+                        <option value="melt">Melt Map</option>
+                        <option value="pore">Pore Predictions &amp; T_env</option>
+                    </select>
+                </div>
+                <div id="results-content" style="flex:1; min-height:0; position:relative;"></div>
+            </div>`;
+
+        const dropdown = document.getElementById("results-select");
+        const content  = document.getElementById("results-content");
+
+        function showMeltMap() {
+            if (_resultsChart) { _resultsChart.dispose(); _resultsChart = null; }
+            content.innerHTML = `
+                <div style="width:100%;height:100%;display:flex;flex-direction:column;
+                             align-items:center;justify-content:center;gap:8px;box-sizing:border-box;">
+                    <canvas id="res-melt-canvas" style="
+                        max-width:92%; max-height:88%;
+                        image-rendering:pixelated; image-rendering:crisp-edges;
+                        object-fit:contain; display:block;"></canvas>
+                    <span style="color:#555; font-size:10px; font-family:monospace;">
+                        Final melt map — orange = melted (T &gt; ${result.T_MELT.toFixed(0)} K)
+                    </span>
+                </div>`;
+            renderMeltFrame(
+                document.getElementById("res-melt-canvas"),
+                result.meltMap, result.NX, result.NY
+            );
+        }
+
+        function showPoreMap() {
+            content.innerHTML = `<div id="res-echarts" style="width:100%;height:100%;"></div>`;
+            if (_resultsChart) _resultsChart.dispose();
+            _resultsChart = echarts.init(document.getElementById("res-echarts"));
+            _resultsChart.setOption(buildPoreScatterOption(result));
+        }
+
+        dropdown.addEventListener("change", () => {
+            if (dropdown.value === "melt") showMeltMap(); else showPoreMap();
+        });
+
+        showMeltMap();   // default view
+    }
+
+    // ── Run button ────────────────────────────────────────────────────────────
+    document.getElementById("run_simulation").addEventListener("click", async () => {
+        const wxmin = parseFloat(xminEl.value);
+        const wxmax = parseFloat(xmaxEl.value);
+        const wymin = parseFloat(yminEl.value);
+        const wymax = parseFloat(ymaxEl.value);
+
+        if ([wxmin, wxmax, wymin, wymax].some(isNaN)) {
+            alert("Please draw a selection window on the build plate first.");
+            return;
+        }
+
+        const laserPower   = parseFloat(document.getElementById("laser_power_body").value)  || 195;
+        const beamRadiusUm = parseFloat(document.getElementById("beam_radius_input").value) || 37.5;
+
+        stopAnimation();
+        switchTab("animations-tab");
+
+        // Show spinner while computing
+        const animDiv = document.getElementById("animations");
+        animDiv.style.cssText = "background:#0e0e0e;overflow:hidden;";
+        // Circumference of r=44 circle ≈ 276.5
+        animDiv.innerHTML = `
+            <style>
+                @keyframes hs-spin { to { transform: rotate(360deg); } }
+            </style>
+            <div style="width:100%;height:100%;display:flex;flex-direction:column;
+                        align-items:center;justify-content:center;gap:18px;">
+                <div style="position:relative;width:120px;height:120px;">
+                    <!-- Track ring -->
+                    <svg style="position:absolute;inset:0;width:100%;height:100%;"
+                         viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="44" fill="none"
+                            stroke="#1c1c1c" stroke-width="6"/>
+                        <!-- Progress arc (stroke-dashoffset updated via JS) -->
+                        <circle id="prog-arc" cx="50" cy="50" r="44" fill="none"
+                            stroke="#2e85c7" stroke-width="6" stroke-linecap="round"
+                            stroke-dasharray="276.5" stroke-dashoffset="276.5"
+                            transform="rotate(-90 50 50)"
+                            style="transition:stroke-dashoffset 0.25s ease;"/>
+                    </svg>
+                    <!-- Spinning highlight dot -->
+                    <svg style="position:absolute;inset:0;width:100%;height:100%;
+                                animation:hs-spin 1.4s linear infinite;"
+                         viewBox="0 0 100 100">
+                        <circle cx="50" cy="6" r="3.5" fill="#2e85c7" opacity="0.9"/>
+                    </svg>
+                    <!-- Percentage label -->
+                    <div id="prog-pct" style="position:absolute;inset:0;display:flex;
+                        align-items:center;justify-content:center;
+                        color:#d0d0d0;font-size:22px;font-family:monospace;font-weight:bold;">
+                        0%
+                    </div>
+                </div>
+                <!-- Status line -->
+                <div id="prog-label" style="
+                    color:#555; font-size:11px; font-family:monospace;
+                    text-align:center; max-width:320px; line-height:1.6;">
+                    Preparing simulation…
+                </div>
+            </div>`;
+
+        const progArc   = document.getElementById("prog-arc");
+        const progPct   = document.getElementById("prog-pct");
+        const progLabel = document.getElementById("prog-label");
+
+        try {
+            const result = await runHeatDiffusion(
+                csvText,
+                {
+                    wxmin, wxmax, wymin, wymax,
+                    pulsePower:    laserPower,
+                    pulseDuration: 50e-6,
+                    laserRadius:   beamRadiusUm * 1e-6,
+                },
+                ({ pct, Tmax, nPores }) => {
+                    // Circumference 276.5 — offset goes from 276.5 (0%) to 0 (100%)
+                    if (progArc) progArc.setAttribute("stroke-dashoffset",
+                        (276.5 * (1 - pct / 100)).toFixed(1));
+                    if (progPct)   progPct.textContent   = pct + "%";
+                    if (progLabel) progLabel.innerHTML   =
+                        `T_max = ${Tmax} K &nbsp;|&nbsp; pores = ${nPores}`;
+                }
+            );
+
+            if (result.framesT.length === 0) throw new Error("Simulation produced no frames.");
+
+            setupAnimationsTab(result);
+            setupResultsTab(result);
+
+        } catch (err) {
+            animDiv.innerHTML = `
+                <div style="color:#f66;font-size:13px;font-family:monospace;padding:24px;">
+                    Error: ${err.message}
+                </div>`;
+        }
     });
 }
 main();
